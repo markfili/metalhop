@@ -1,0 +1,41 @@
+# Kill-Town Death Fest XI "Stages of Decay" - 3-6 September 2026, Pumpehuset, Copenhagen
+# Bandcamp URLs taken from each band's own page on killtowndeathfest.com.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Abhorrence          | Finland        | https://abhorrencefin.bandcamp.com/album/completely-vulgar
+Atomic Aggressor    | Chile          | https://atomicaggressor.bandcamp.com/album/sights-of-suffering
+Cenotaph            | Mexico         | https://cenotaphmx.bandcamp.com/
+Civerous            | United States  | https://transylvanianrecordings.bandcamp.com/album/civerous-decrepit-flesh-relic
+Cryptworm           | United Kingdom | https://cryptworm.bandcamp.com/
+Dead Void           | Denmark        | https://deadvoid.bandcamp.com/
+Death Pulsation     | Sweden         | https://deathpulsation.bandcamp.com/album/demo-2025
+Degraved            | United States  | https://degraved.bandcamp.com/
+Disembodiment       | Canada         | https://disembodimentdeath.bandcamp.com/album/mutated-chaos
+Ectovoid            | United States  | https://ectovoid.bandcamp.com/
+Father Befouled     | United States  | https://fatherbefouled.bandcamp.com/
+Filth               | Sweden         | https://mesacounojo.bandcamp.com/album/death-exhibiton
+Fossilization       | Brazil         | https://everlastingspew.bandcamp.com/album/advent-of-wounds
+Funebrarum          | United States  | https://funebrarum-death-metal.bandcamp.com/
+Larvae              | Italy          | https://larvae-gore.bandcamp.com/album/arousal-of-the-crawling-creature
+Massacre            | United States  | https://massacre3.bandcamp.com/album/necrolution
+Morbific            | Finland        | https://morbific.bandcamp.com/
+Murder Squad        | Sweden         | -
+Mutation            | Sweden         | https://mutationswe.bandcamp.com/
+Nekus               | Germany        | https://sentientruin.bandcamp.com/album/sepulchral-divination
+Of Feather And Bone | United States  | https://offeatherandbone666.bandcamp.com/
+Perishing           | Costa Rica     | https://perishing.bandcamp.com/album/malicious-acropolis-unveiled
+Phenocryst          | Portugal       | https://phenocryst.bandcamp.com/
+Phobocosm           | Canada         | https://darkdescentrecords.bandcamp.com/album/gateway
+Proscription        | Finland        | https://darkdescentrecords.bandcamp.com/album/conduit
+Purtenance          | Finland        | https://xtreemmusic.bandcamp.com/album/buried-incarnation
+Putridarium         | Germany        | https://putridariummetalofdeath.bandcamp.com/album/necrolog-a-del-sadismo-excerpts-from-a-deranged-mind
+Rothadás            | Hungary        | https://rothadasdeathdoom.bandcamp.com/
+Rottrevore          | United States  | https://xtreemmusic.bandcamp.com/album/iniquitous
+Savage              | Netherlands    | https://savagedeathmetal.bandcamp.com/
+Seraphic Entombment | United States  | https://seraphicentombment.bandcamp.com/
+Shrieking Demons    | Italy          | https://shriekingdemons.bandcamp.com/album/the-festering-dwellers
+Skepticism          | Finland        | https://skepticism.bandcamp.com/
+Sněť                | Czechia        | https://snet.bandcamp.com/album/mokv-n-v-okovech
+Tyranny             | Finland        | https://tyrannyfuneraldoom.bandcamp.com/
+Warp Chamber        | United States  | https://warpchamber.bandcamp.com/album/implements-of-excruciation
