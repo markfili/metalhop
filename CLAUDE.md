@@ -131,7 +131,14 @@ have already bitten:
 ## Working on this
 
 - Keep it one file. If it genuinely outgrows that, split by layer above, but
-  the default answer is no.
+  the default answer is no. `tools/` is not an exception to this: it holds
+  things that are not the CLI, currently only `mkgif.py`, which renders the
+  README's tutorial GIF. Those frames are drawn rather than screenshotted
+  because headless Firefox cannot rasterise under proot (SWGL fails to map a
+  framebuffer), so if a page's design changes the GIF does not follow by
+  itself - rerun it. It draws the Bandcamp embed as an empty block on purpose:
+  the real tracklist lives inside the iframe, and inventing song titles to
+  fill the space would put made-up data in a tutorial.
 - The MA parsers were written against MA's markup but have **never been
   verified against live responses**, because MA has been behind a Cloudflare
   challenge throughout. If a listing comes back empty rather than raising,

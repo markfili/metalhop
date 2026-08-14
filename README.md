@@ -8,6 +8,14 @@ Personal project, non-commercial, open source. Live queries only; nothing about
 Metal Archives is cached or written to disk. See `CLAUDE.md` for the design
 constraints, which are deliberate and not up for casual relaxation.
 
+<img src="tutorial.gif" alt="Opening the landing page, picking the 2019 edition, and playing a band" width="300">
+
+Landing page to playing record, in two taps. The frames are **drawn, not
+captured** — the target device (proot Debian on Android) has no browser that
+can rasterise a page — but every colour, measurement and line of text in them
+comes from the real stylesheets and the built pages. Regenerate with
+`python3 tools/mkgif.py`.
+
 ## The two modes
 
 **Hopping (`metalhop.py`)** — search a band, see its Bandcamp link, pick a
