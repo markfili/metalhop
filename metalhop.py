@@ -42,7 +42,7 @@ except ImportError:
 
 BASE = "https://www.metal-archives.com"
 KTDF = "https://www.killtowndeathfest.com"
-CONTACT = "you@example.com"          # <- put a real contact here
+CONTACT = "mrkfilipovic3@gmail.com"  # must stay a working address (rule 4)
 UA = f"metalhop/0.2 (personal, non-commercial; {CONTACT})"
 MA_INTERVAL = 1.5                    # seconds between MA requests
 BC_INTERVAL = 1.0                    # seconds between Bandcamp requests
