@@ -68,6 +68,11 @@ Everything lives in `metalhop.py`, deliberately. Six layers:
   several files at once and shares one in-memory `_resolved` cache across them,
   which matters because the archive repeats bands heavily: 340 slots across the
   14 editions are only ~230 distinct Bandcamp URLs.
+- **Restyling** - `--restyle` re-emits every built page from its own baked
+  records and rewrites the index, with no requests at all. Reach for it after
+  any template edit; rebuilding from the lineup files instead would re-resolve
+  the whole archive for a CSS change. It preserves each page's title, and so
+  the localStorage key its heard-set lives under.
 - **Landing page** - `--index` reads the built pages back (`page_summary`
   parses the `BANDS` blob out of each) and writes `index.html` linking them.
   It makes no requests, so it is safe to rerun after every build; the counts

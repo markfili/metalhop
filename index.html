@@ -5,35 +5,50 @@
  :root{color-scheme:dark}
  body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
       padding:16px;max-width:760px;margin-inline:auto}
- h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:18px}
- ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
- li{border-bottom:1px solid #222}
- a.ed{display:flex;align-items:baseline;gap:10px;padding:11px 4px;
-      text-decoration:none;color:inherit}
- a.ed:hover{background:#181818}
- .nm{flex:1;min-width:0;font-weight:600}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px}
+ .how{color:#999;font-size:13px;margin:14px 0 12px;padding:9px 12px;
+      background:#181818;border-left:3px solid #c33;border-radius:0 4px 4px 0}
+ ol{list-style:none;padding:0;margin:0}
+ li{margin-bottom:8px}
+ /* Cards rather than rows: on a phone there is no hover to discover, so the
+    border, the chevron and the pressed state have to say "tap me" while the
+    finger is nowhere near. */
+ a.ed{display:flex;align-items:center;gap:12px;padding:12px 14px;
+      text-decoration:none;color:inherit;background:#171717;
+      border:1px solid #2c2c2c;border-radius:7px;
+      -webkit-tap-highlight-color:transparent;transition:background .12s,
+      border-color .12s}
+ a.ed:hover{background:#1e1e1e;border-color:#444}
+ a.ed:active{background:#241717;border-color:#c33}
+ a.ed:focus-visible{outline:2px solid #c33;outline-offset:2px}
+ .txt{flex:1;min-width:0}
+ .nm{font-weight:600;display:block}
  .nm .yr{color:#c33;margin-right:7px}
- .st{color:#777;font-size:12px;white-space:nowrap}
- .hd{color:#4a4;font-size:12px;white-space:nowrap;min-width:62px;text-align:right}
+ .st{color:#777;font-size:12px}
+ .hd{color:#4a4;font-size:12px;background:#152015;border:1px solid #244024;
+     border-radius:10px;padding:1px 8px;margin-left:7px;white-space:nowrap}
+ .go{color:#c33;font-size:22px;line-height:1;flex:none}
  .foot{color:#666;font-size:12px;margin-top:18px} a{color:#c33}
 </style>
 <h1>Kill-Town Death Fest</h1>
 <div class=sub>15 editions &middot; 376 slots &middot; 312 playable &middot; 166 hours</div>
-<ol><li><a class=ed href="killtown-2026.html"><span class=nm><span class=yr>2026</span>XI &quot;Stages of Decay&quot;</span><span class=st>36 bands &middot; 35 playable &middot; 21.8 h</span><span class=hd data-key="metalhop:kill-town-death-fest-xi-stages-of-decay"></span></a></li>
-<li><a class=ed href="killtown-2025.html"><span class=nm><span class=yr>2025</span>“15 Years of Death, Darkness and Decay”</span><span class=st>37 bands &middot; 34 playable &middot; 16.8 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2025-15-years-of-death-darkness-and-decay"></span></a></li>
-<li><a class=ed href="killtown-2024-london.html"><span class=nm><span class=yr>2024</span>London</span><span class=st>19 bands &middot; 17 playable &middot; 6.6 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2024-london"></span></a></li>
-<li><a class=ed href="killtown-2023.html"><span class=nm><span class=yr>2023</span>“The Carrion Cathering”</span><span class=st>37 bands &middot; 34 playable &middot; 16.5 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2023-the-carrion-cathering"></span></a></li>
-<li><a class=ed href="killtown-2023-decay-in-may.html"><span class=nm><span class=yr>2023</span>Decay In May</span><span class=st>6 bands &middot; 6 playable &middot; 2.0 h</span><span class=hd data-key="metalhop:kill-town-death-fest-decay-in-may-2023"></span></a></li>
-<li><a class=ed href="killtown-2022.html"><span class=nm><span class=yr>2022</span>“Ridden with Disease”</span><span class=st>35 bands &middot; 32 playable &middot; 14.8 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2022-ridden-with-disease"></span></a></li>
-<li><a class=ed href="killtown-2022-decay-in-may.html"><span class=nm><span class=yr>2022</span>Decay In May</span><span class=st>10 bands &middot; 10 playable &middot; 5.8 h</span><span class=hd data-key="metalhop:kill-town-death-fest-decay-in-may-2022"></span></a></li>
-<li><a class=ed href="killtown-2021.html"><span class=nm><span class=yr>2021</span>“Corona Edition”</span><span class=st>13 bands &middot; 13 playable &middot; 7.6 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2021-corona-edition"></span></a></li>
-<li><a class=ed href="killtown-2019.html"><span class=nm><span class=yr>2019</span>“The Decompomorphosis”</span><span class=st>40 bands &middot; 32 playable &middot; 15.9 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2019-the-decompomorphosis"></span></a></li>
-<li><a class=ed href="killtown-2018.html"><span class=nm><span class=yr>2018</span>“The Resurrection”</span><span class=st>28 bands &middot; 25 playable &middot; 15.6 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2018-the-resurrection"></span></a></li>
-<li><a class=ed href="killtown-2014.html"><span class=nm><span class=yr>2014</span>“The Final Edition”</span><span class=st>28 bands &middot; 21 playable &middot; 10.6 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2014-the-final-edition"></span></a></li>
-<li><a class=ed href="killtown-2013.html"><span class=nm><span class=yr>2013</span></span><span class=st>24 bands &middot; 13 playable &middot; 9.4 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2013"></span></a></li>
-<li><a class=ed href="killtown-2012.html"><span class=nm><span class=yr>2012</span></span><span class=st>24 bands &middot; 16 playable &middot; 9.9 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2012"></span></a></li>
-<li><a class=ed href="killtown-2011.html"><span class=nm><span class=yr>2011</span></span><span class=st>18 bands &middot; 12 playable &middot; 6.9 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2011"></span></a></li>
-<li><a class=ed href="killtown-2010.html"><span class=nm><span class=yr>2010</span></span><span class=st>21 bands &middot; 12 playable &middot; 5.8 h</span><span class=hd data-key="metalhop:kill-town-death-fest-2010"></span></a></li></ol>
+<p class=how><b>Tap an edition</b> to open its lineup, then tap any band to
+ play it right on the page. Nothing installs, nothing signs in.</p>
+<ol><li><a class=ed href="killtown-2026.html"><span class=txt><span class=nm><span class=yr>2026</span>XI &quot;Stages of Decay&quot;</span><span class=st>36 bands &middot; 35 playable &middot; 21.8 h<span class=hd data-key="metalhop:kill-town-death-fest-xi-stages-of-decay" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2025.html"><span class=txt><span class=nm><span class=yr>2025</span>“15 Years of Death, Darkness and Decay”</span><span class=st>37 bands &middot; 34 playable &middot; 16.8 h<span class=hd data-key="metalhop:kill-town-death-fest-2025-15-years-of-death-darkness-and-decay" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2024-london.html"><span class=txt><span class=nm><span class=yr>2024</span>London</span><span class=st>19 bands &middot; 17 playable &middot; 6.6 h<span class=hd data-key="metalhop:kill-town-death-fest-2024-london" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2023.html"><span class=txt><span class=nm><span class=yr>2023</span>“The Carrion Cathering”</span><span class=st>37 bands &middot; 34 playable &middot; 16.5 h<span class=hd data-key="metalhop:kill-town-death-fest-2023-the-carrion-cathering" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2023-decay-in-may.html"><span class=txt><span class=nm><span class=yr>2023</span>Decay In May</span><span class=st>6 bands &middot; 6 playable &middot; 2.0 h<span class=hd data-key="metalhop:kill-town-death-fest-decay-in-may-2023" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2022.html"><span class=txt><span class=nm><span class=yr>2022</span>“Ridden with Disease”</span><span class=st>35 bands &middot; 32 playable &middot; 14.8 h<span class=hd data-key="metalhop:kill-town-death-fest-2022-ridden-with-disease" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2022-decay-in-may.html"><span class=txt><span class=nm><span class=yr>2022</span>Decay In May</span><span class=st>10 bands &middot; 10 playable &middot; 5.8 h<span class=hd data-key="metalhop:kill-town-death-fest-decay-in-may-2022" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2021.html"><span class=txt><span class=nm><span class=yr>2021</span>“Corona Edition”</span><span class=st>13 bands &middot; 13 playable &middot; 7.6 h<span class=hd data-key="metalhop:kill-town-death-fest-2021-corona-edition" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2019.html"><span class=txt><span class=nm><span class=yr>2019</span>“The Decompomorphosis”</span><span class=st>40 bands &middot; 32 playable &middot; 15.9 h<span class=hd data-key="metalhop:kill-town-death-fest-2019-the-decompomorphosis" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2018.html"><span class=txt><span class=nm><span class=yr>2018</span>“The Resurrection”</span><span class=st>28 bands &middot; 25 playable &middot; 15.6 h<span class=hd data-key="metalhop:kill-town-death-fest-2018-the-resurrection" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2014.html"><span class=txt><span class=nm><span class=yr>2014</span>“The Final Edition”</span><span class=st>28 bands &middot; 21 playable &middot; 10.6 h<span class=hd data-key="metalhop:kill-town-death-fest-2014-the-final-edition" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2013.html"><span class=txt><span class=nm><span class=yr>2013</span></span><span class=st>24 bands &middot; 13 playable &middot; 9.4 h<span class=hd data-key="metalhop:kill-town-death-fest-2013" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2012.html"><span class=txt><span class=nm><span class=yr>2012</span></span><span class=st>24 bands &middot; 16 playable &middot; 9.9 h<span class=hd data-key="metalhop:kill-town-death-fest-2012" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2011.html"><span class=txt><span class=nm><span class=yr>2011</span></span><span class=st>18 bands &middot; 12 playable &middot; 6.9 h<span class=hd data-key="metalhop:kill-town-death-fest-2011" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li>
+<li><a class=ed href="killtown-2010.html"><span class=txt><span class=nm><span class=yr>2010</span></span><span class=st>21 bands &middot; 12 playable &middot; 5.8 h<span class=hd data-key="metalhop:kill-town-death-fest-2010" hidden></span></span></span><span class=go aria-hidden=true>&rsaquo;</span></a></li></ol>
 <p class=foot>Lineups and Bandcamp links from
  <a href="https://killtowndeathfest.com/">killtowndeathfest.com</a>.
  Playback is Bandcamp's own embedded player; each page remembers what you have
@@ -44,7 +59,7 @@
 for(const el of document.querySelectorAll('[data-key]')){
  try{
   const n = JSON.parse(localStorage.getItem(el.dataset.key) || '[]').length;
-  if(n) el.textContent = n + ' heard';
+  if(n){ el.textContent = n + ' heard'; el.hidden = false; }
  }catch(e){}
 }
 </script>

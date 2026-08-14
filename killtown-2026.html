@@ -16,20 +16,30 @@
  button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
         padding:8px 14px;font:inherit;cursor:pointer}
  button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
- ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
- li{display:flex;align-items:center;gap:10px;padding:9px 4px;
-    border-bottom:1px solid #222;cursor:pointer}
- li:hover{background:#181818}
- li.on{background:#1e1414;box-shadow:inset 3px 0 0 #c33}
- li.heard .nm{color:#666;text-decoration:line-through}
+ ol{list-style:none;padding:0;margin:0}
+ /* Cards, not rows: a phone has no hover, so a band has to look tappable
+    before the finger arrives. The play glyph carries that on its own. */
+ li{display:flex;align-items:center;gap:11px;padding:11px 13px;margin-bottom:8px;
+    background:#171717;border:1px solid #2c2c2c;border-radius:7px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .12s,border-color .12s}
+ li:hover{background:#1e1e1e;border-color:#444}
+ li:active{background:#241717;border-color:#c33}
+ li.on{background:#241717;border-color:#c33}
+ li.on .play{color:#c33}
+ li.heard .nm b{color:#666;text-decoration:line-through}
  .nm{flex:1;min-width:0} .nm b{font-weight:600}
  .cy{color:#777;font-size:12px} .rel{color:#666;font-size:12px;display:block}
- .dead .nm b{color:#665} .tick{color:#555;font-size:15px;width:18px;text-align:center}
+ /* Nothing to play is not a tappable thing; say so by looking inert. */
+ li.dead{opacity:.5;background:#141414;cursor:default}
+ li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
+ .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
+ .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
  a{color:#c33}
 </style>
 <h1>Kill-Town Death Fest XI &quot;Stages of Decay&quot;</h1>
 <div class=sub>35 of 36 bands playable - tap a band, tap next when the record ends</div>
-<div id=player><div id=now class=none>pick a band below</div></div>
+<div id=player><div id=now class=none>Tap any band below to play it &darr;</div></div>
 <div class=bar>
  <button id=prev>&larr; prev band</button>
  <button id=next>next band &rarr;</button>
@@ -70,7 +80,10 @@ function render(){
                + (b.embed ? '' : 'dead');
   li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
    + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
-   + `<span class=rel>${meta(b)}</span></span>`;
+   + `<span class=rel>${meta(b)}</span></span>`
+   // A play glyph only where there is something to play; the embed is
+   // cross-origin, so this marks what is selected, never what is sounding.
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
   li.onclick = () => play(i);
   listEl.appendChild(li);
  });

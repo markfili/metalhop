@@ -515,20 +515,30 @@ BUILT_PAGE = """<!doctype html><meta charset=utf-8>
  button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
         padding:8px 14px;font:inherit;cursor:pointer}
  button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
- ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
- li{display:flex;align-items:center;gap:10px;padding:9px 4px;
-    border-bottom:1px solid #222;cursor:pointer}
- li:hover{background:#181818}
- li.on{background:#1e1414;box-shadow:inset 3px 0 0 #c33}
- li.heard .nm{color:#666;text-decoration:line-through}
+ ol{list-style:none;padding:0;margin:0}
+ /* Cards, not rows: a phone has no hover, so a band has to look tappable
+    before the finger arrives. The play glyph carries that on its own. */
+ li{display:flex;align-items:center;gap:11px;padding:11px 13px;margin-bottom:8px;
+    background:#171717;border:1px solid #2c2c2c;border-radius:7px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .12s,border-color .12s}
+ li:hover{background:#1e1e1e;border-color:#444}
+ li:active{background:#241717;border-color:#c33}
+ li.on{background:#241717;border-color:#c33}
+ li.on .play{color:#c33}
+ li.heard .nm b{color:#666;text-decoration:line-through}
  .nm{flex:1;min-width:0} .nm b{font-weight:600}
  .cy{color:#777;font-size:12px} .rel{color:#666;font-size:12px;display:block}
- .dead .nm b{color:#665} .tick{color:#555;font-size:15px;width:18px;text-align:center}
+ /* Nothing to play is not a tappable thing; say so by looking inert. */
+ li.dead{opacity:.5;background:#141414;cursor:default}
+ li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
+ .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
+ .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
  a{color:#c33}
 </style>
 <h1>__TITLE__</h1>
 <div class=sub>__SUB__</div>
-<div id=player><div id=now class=none>pick a band below</div></div>
+<div id=player><div id=now class=none>Tap any band below to play it &darr;</div></div>
 <div class=bar>
  <button id=prev>&larr; prev band</button>
  <button id=next>next band &rarr;</button>
@@ -569,7 +579,10 @@ function render(){
                + (b.embed ? '' : 'dead');
   li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
    + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
-   + `<span class=rel>${meta(b)}</span></span>`;
+   + `<span class=rel>${meta(b)}</span></span>`
+   // A play glyph only where there is something to play; the embed is
+   // cross-origin, so this marks what is selected, never what is sounding.
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
   li.onclick = () => play(i);
   listEl.appendChild(li);
  });
@@ -741,20 +754,35 @@ INDEX_PAGE = """<!doctype html><meta charset=utf-8>
  :root{color-scheme:dark}
  body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
       padding:16px;max-width:760px;margin-inline:auto}
- h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:18px}
- ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
- li{border-bottom:1px solid #222}
- a.ed{display:flex;align-items:baseline;gap:10px;padding:11px 4px;
-      text-decoration:none;color:inherit}
- a.ed:hover{background:#181818}
- .nm{flex:1;min-width:0;font-weight:600}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px}
+ .how{color:#999;font-size:13px;margin:14px 0 12px;padding:9px 12px;
+      background:#181818;border-left:3px solid #c33;border-radius:0 4px 4px 0}
+ ol{list-style:none;padding:0;margin:0}
+ li{margin-bottom:8px}
+ /* Cards rather than rows: on a phone there is no hover to discover, so the
+    border, the chevron and the pressed state have to say "tap me" while the
+    finger is nowhere near. */
+ a.ed{display:flex;align-items:center;gap:12px;padding:12px 14px;
+      text-decoration:none;color:inherit;background:#171717;
+      border:1px solid #2c2c2c;border-radius:7px;
+      -webkit-tap-highlight-color:transparent;transition:background .12s,
+      border-color .12s}
+ a.ed:hover{background:#1e1e1e;border-color:#444}
+ a.ed:active{background:#241717;border-color:#c33}
+ a.ed:focus-visible{outline:2px solid #c33;outline-offset:2px}
+ .txt{flex:1;min-width:0}
+ .nm{font-weight:600;display:block}
  .nm .yr{color:#c33;margin-right:7px}
- .st{color:#777;font-size:12px;white-space:nowrap}
- .hd{color:#4a4;font-size:12px;white-space:nowrap;min-width:62px;text-align:right}
+ .st{color:#777;font-size:12px}
+ .hd{color:#4a4;font-size:12px;background:#152015;border:1px solid #244024;
+     border-radius:10px;padding:1px 8px;margin-left:7px;white-space:nowrap}
+ .go{color:#c33;font-size:22px;line-height:1;flex:none}
  .foot{color:#666;font-size:12px;margin-top:18px} a{color:#c33}
 </style>
 <h1>__TITLE__</h1>
 <div class=sub>__SUB__</div>
+<p class=how><b>Tap an edition</b> to open its lineup, then tap any band to
+ play it right on the page. Nothing installs, nothing signs in.</p>
 <ol>__ROWS__</ol>
 <p class=foot>Lineups and Bandcamp links from
  <a href="https://killtowndeathfest.com/">killtowndeathfest.com</a>.
@@ -766,7 +794,7 @@ INDEX_PAGE = """<!doctype html><meta charset=utf-8>
 for(const el of document.querySelectorAll('[data-key]')){
  try{
   const n = JSON.parse(localStorage.getItem(el.dataset.key) || '[]').length;
-  if(n) el.textContent = n + ' heard';
+  if(n){ el.textContent = n + ' heard'; el.hidden = false; }
  }catch(e){}
 }
 </script>"""
@@ -790,10 +818,33 @@ def page_summary(path):
         "file": os.path.basename(path),
         "title": html.unescape(title.group(1)),
         "key": key.group(1) if key else "",
+        "records": records,
         "bands": len(records),
         "playable": len(playable),
         "minutes": sum(r["minutes"] or 0 for r in playable),
     }
+
+
+def restyle(page_dir):
+    """Re-emit built pages from the records already baked into them.
+
+    A design change should not cost another archive-wide resolve: album ids are
+    permanent, so the page holds everything the template needs. This makes no
+    requests at all. The title is unchanged, so each page keeps the
+    localStorage key its heard-set lives under.
+    """
+    done = []
+    for path in sorted(glob.glob(os.path.join(page_dir, "killtown-*.html"))):
+        got = page_summary(path)
+        if not got:
+            print(f"  skipped {os.path.basename(path)} (not a built page)")
+            continue
+        sub = (f"{got['playable']} of {got['bands']} bands playable - "
+               "tap a band, tap next when the record ends")
+        build_page(got["records"], path, got["title"], sub)
+        print(f"  restyled {os.path.basename(path):<32} {got['bands']:>3} bands")
+        done.append(path)
+    return done
 
 
 def edition_order(name):
@@ -830,11 +881,14 @@ def build_index(page_dir, out_path, title="Kill-Town Death Fest"):
         label = re.sub(rf"^{year}\s*|\s*{year}$", "", label)
         rows.append(
             f'<li><a class=ed href="{html.escape(p["file"])}">'
+            f'<span class=txt>'
             f'<span class=nm><span class=yr>{year}</span>'
             f'{html.escape(label)}</span>'
             f'<span class=st>{p["bands"]} bands &middot; {p["playable"]}'
-            f' playable &middot; {p["minutes"] / 60:.1f} h</span>'
-            f'<span class=hd data-key="{html.escape(p["key"])}"></span>'
+            f' playable &middot; {p["minutes"] / 60:.1f} h'
+            f'<span class=hd data-key="{html.escape(p["key"])}" hidden></span>'
+            f'</span></span>'
+            f'<span class=go aria-hidden=true>&rsaquo;</span>'
             f'</a></li>')
 
     bands = sum(p["bands"] for p in pages)
@@ -982,8 +1036,18 @@ def main():
                          "network")
     ap.add_argument("--index-dir", default=".", metavar="DIR",
                     help="where --index looks for built pages (default: .)")
+    ap.add_argument("--restyle", nargs="?", const=".", metavar="DIR",
+                    help="re-render built pages (and the index) from the "
+                         "records already in them, after a template change; "
+                         "makes no requests")
     args = ap.parse_args()
     args.serve = args.serve or args.embed
+
+    if args.restyle:
+        pages = restyle(args.restyle)
+        print(f"  {len(pages)} pages re-rendered, no requests made")
+        print("  wrote " + build_index(args.restyle, "index.html"))
+        return
 
     if args.index:
         print("  wrote " + build_index(args.index_dir, args.index))

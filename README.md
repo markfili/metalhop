@@ -43,6 +43,16 @@ touches no network at all, so rerun it after any rebuild:
 python3 metalhop.py --index          # writes index.html
 ```
 
+**Restyling (`--restyle`)** — after a template change, re-renders every built
+page from the records already baked into it, then rewrites the index. Album IDs
+are permanent, so this needs no network and takes seconds rather than another
+archive-wide resolve. Titles are preserved, so nothing you have marked as heard
+is lost.
+
+```bash
+python3 metalhop.py --restyle        # 15 pages in ~3s, no requests
+```
+
 Each edition page records what you have heard under its own `localStorage`
 key; the index reads those keys, so it shows your progress per edition without
 opening any of them.
