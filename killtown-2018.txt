@@ -1,0 +1,33 @@
+# Kill-Town Death Fest 2018 “The Resurrection”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Blood Incantation | United States  | https://bloodincantation.bandcamp.com/
+Cemetery Urn      | Australia      | https://cemeteryurn.bandcamp.com/
+Deiquisitor       | Denmark        | https://deiquisitor.bandcamp.com/
+Demilich          | Finland        | https://demilich.bandcamp.com/releases
+Derketa           | United States  | http://derketa.bandcamp.com/
+Fetid             | United States  | https://fetid.bandcamp.com/
+Galvanizer        | Finland        | https://galvanizer.bandcamp.com/
+Grave Miasma      | United Kingdom | https://gravemiasma.bandcamp.com/
+Hyperdontia       | Turkey/Denmark | https://hyperdontiaofficial.bandcamp.com/music
+Incantation       | United States  | https://incantation666.bandcamp.com/music
+Mefitic           | Italy          | https://mefitic.bandcamp.com/
+Necros Christos   | Germany        | https://necroschristos.bandcamp.com/
+Necrot            | United States  | https://necrot.bandcamp.com/music
+Necrowretch       | France         | https://necrowretch.bandcamp.com/
+Phrenelith        | Denmark        | https://phrenelith.bandcamp.com/
+Pissgrave         | United States  | https://pissgrave.bandcamp.com/music
+Reptilian         | Norway         | https://reptilianfusa.bandcamp.com/
+Rippikoulu        | Finland        | https://rippikoulu.bandcamp.com/
+Runemagick        | Sweden         | https://runemagick.bandcamp.com/
+Scolex            | United States  | -
+Sempiternal Dusk  | United States  | -
+Spectral Voice    | Denmark        | https://spectralvoice.bandcamp.com/
+Taphos            | Denmark        | https://taphos.bandcamp.com/music
+Torture Rack      | United States  | https://torturerack.bandcamp.com/
+Triumvir Foul     | United States  | https://vrasubatlat.bandcamp.com/
+Undergang         | Denmark        | http://undergang.bandcamp.com/
+Venenum           | Germany        | https://venenum.bandcamp.com/
+Wormridden        | International  | http://wormridden.bandcamp.com/

@@ -1,0 +1,141 @@
+<!doctype html><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Kill-Town Death Fest 2014 “The Final Edition”</title>
+<style>
+ :root{color-scheme:dark}
+ body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
+      padding:16px;max-width:760px;margin-inline:auto}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:14px}
+ #player{position:sticky;top:0;background:#111;padding:8px 0 12px;z-index:2}
+ #now{font-size:15px;margin-bottom:6px}
+ #now b{color:#fff} #now span{color:#888}
+ iframe{width:100%;max-width:400px;height:600px;border:0;display:block}
+ .gated{color:#a55;font-style:italic}
+ .none{color:#666;padding:24px 0}
+ .bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+ button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
+        padding:8px 14px;font:inherit;cursor:pointer}
+ button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
+ ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
+ li{display:flex;align-items:center;gap:10px;padding:9px 4px;
+    border-bottom:1px solid #222;cursor:pointer}
+ li:hover{background:#181818}
+ li.on{background:#1e1414;box-shadow:inset 3px 0 0 #c33}
+ li.heard .nm{color:#666;text-decoration:line-through}
+ .nm{flex:1;min-width:0} .nm b{font-weight:600}
+ .cy{color:#777;font-size:12px} .rel{color:#666;font-size:12px;display:block}
+ .dead .nm b{color:#665} .tick{color:#555;font-size:15px;width:18px;text-align:center}
+ a{color:#c33}
+</style>
+<h1>Kill-Town Death Fest 2014 “The Final Edition”</h1>
+<div class=sub>21 of 28 bands playable - tap a band, tap next when the record ends</div>
+<div id=player><div id=now class=none>pick a band below</div></div>
+<div class=bar>
+ <button id=prev>&larr; prev band</button>
+ <button id=next>next band &rarr;</button>
+ <button id=stop>stop</button>
+ <button id=mark>mark heard</button>
+ <button id=unheard>next unheard</button>
+</div>
+<ol id=list></ol>
+<script>
+const BANDS = [{"name": "Anatomia", "country": "Japan", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3671303439/size=large/tracklist=true/artwork=small/", "release": "Split With DUSK", "url": "https://anatomia.bandcamp.com/album/split-with-dusk", "note": null, "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Ataraxie", "country": "France", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3350043519/size=large/tracklist=true/artwork=small/", "release": "Le Déclin", "url": "https://ataraxie.bandcamp.com/album/le-d-clin", "note": null, "tracks": 4, "playable": 4, "minutes": 81}, {"name": "Ataraxy", "country": "Spain", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4212838328/size=large/tracklist=true/artwork=small/", "release": "The Last Mirror", "url": "https://ataraxymuerte.bandcamp.com/album/the-last-mirror", "note": null, "tracks": 7, "playable": 7, "minutes": 42}, {"name": "Auroch", "country": "Canada", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3809495166/size=large/tracklist=true/artwork=small/", "release": "Stolen Angelic Tongues", "url": "https://auroch1.bandcamp.com/album/stolen-angelic-tongues", "note": null, "tracks": 5, "playable": 5, "minutes": 18}, {"name": "Bolzer", "country": "Switzerland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=944002456/size=large/tracklist=true/artwork=small/", "release": "Lese Majesty", "url": "https://bolzer.bandcamp.com/album/lese-majesty", "note": "artist mismatch: page says 'BØLZER'", "tracks": 4, "playable": 4, "minutes": 29}, {"name": "Bombs Of Hades", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3186722969/size=large/tracklist=true/artwork=small/", "release": "Phantom Bell", "url": "https://bombs-of-hades.bandcamp.com/album/phantom-bell", "note": null, "tracks": 4, "playable": 4, "minutes": 16}, {"name": "Centinex", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Cianide", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2801464838/size=large/tracklist=true/artwork=small/", "release": "Hell's Rebirth", "url": "https://cianide.bandcamp.com/album/hells-rebirth", "note": null, "tracks": 9, "playable": 9, "minutes": 37}, {"name": "Dead Congregation", "country": "Greece", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1891331168/size=large/tracklist=true/artwork=small/", "release": "Purifying Consecrated Ground (2022 remaster)", "url": "https://deadcongregation.bandcamp.com/album/purifying-consecrated-ground-2022-remaster", "note": null, "tracks": 5, "playable": 5, "minutes": 20}, {"name": "Detest", "country": "Denmark", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Ensnared", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Fuoco Fatuo", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2432759025/size=large/tracklist=true/artwork=small/", "release": "Obsidian Katabasis", "url": "https://fuocofatuo.bandcamp.com/album/obsidian-katabasis", "note": null, "tracks": 6, "playable": 6, "minutes": 60}, {"name": "God Macabre", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4053219949/size=large/tracklist=true/artwork=small/", "release": "The Winterlong", "url": "https://godmacabre.bandcamp.com/album/the-winterlong", "note": null, "tracks": 11, "playable": 11, "minutes": 41}, {"name": "Gouge", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3364615875/size=large/tracklist=true/artwork=small/", "release": "Beyond Death", "url": "https://gouge-norway.bandcamp.com/album/beyond-death", "note": null, "tracks": 12, "playable": 12, "minutes": 29}, {"name": "Imprecation", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2613106734/size=large/tracklist=true/artwork=small/", "release": "Jehovah Denied", "url": "https://imprecation666.bandcamp.com/album/jehovah-denied", "note": null, "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Incarceration", "country": "Brazil", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2139067755/size=large/tracklist=true/artwork=small/", "release": "Empiricism", "url": "https://incarceration.bandcamp.com/album/empiricism", "note": null, "tracks": 4, "playable": 4, "minutes": 21}, {"name": "Irkallian Oracle", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1151240885/size=large/tracklist=true/artwork=small/", "release": "Grave Ekstasis", "url": "https://irkallianoracle.bandcamp.com/album/grave-ekstasis", "note": null, "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Krypts", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2813677146/size=large/tracklist=true/artwork=small/", "release": "Unending Degradation", "url": "https://krypts.bandcamp.com/album/unending-degradation", "note": null, "tracks": 8, "playable": 8, "minutes": 39}, {"name": "Lvcifyre", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3074178547/size=large/tracklist=true/artwork=small/", "release": "The Broken Seal", "url": "https://lvcifyre.bandcamp.com/album/the-broken-seal-2", "note": null, "tracks": 9, "playable": 9, "minutes": 44}, {"name": "Mitochondrion", "country": "Canada", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Moondark", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4123714948/size=large/tracklist=true/artwork=small/", "release": "The Abysmal Womb", "url": "https://moondark666.bandcamp.com/album/the-abysmal-womb", "note": null, "tracks": 8, "playable": 8, "minutes": 46}, {"name": "Obliteration", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2803246182/size=large/tracklist=true/artwork=small/", "release": "LIVE AT CHAOS DESCENDS MMXIX", "url": "https://obliteration.bandcamp.com/album/live-at-chaos-descends-mmxix", "note": null, "tracks": 8, "playable": 8, "minutes": 48}, {"name": "Ritual Necromancy", "country": "United States", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Sonne Adam", "country": "Israel", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "The Vein", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2110526331/size=large/tracklist=true/artwork=small/", "release": "Black Lamentation - EP - 2017", "url": "https://thevein.bandcamp.com/album/black-lamentation-ep-2017", "note": null, "tracks": 3, "playable": 3, "minutes": 14}, {"name": "Unaussprechlichen Kulten", "country": "Chile", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Undergang", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2771124459/size=large/tracklist=true/artwork=small/", "release": "Maddikehavets Dans", "url": "https://undergang.bandcamp.com/album/maddikehavets-dans", "note": null, "tracks": 1, "playable": 1, "minutes": 5}, {"name": "Zombiefication", "country": "Mexico", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=240565610/size=large/tracklist=true/artwork=small/", "release": "Below The Grief", "url": "https://zombiefication.bandcamp.com/album/below-the-grief", "note": null, "tracks": 7, "playable": 7, "minutes": 45}];
+const KEY = 'metalhop:kill-town-death-fest-2014-the-final-edition';
+let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let cur = -1;
+
+const listEl = document.getElementById('list');
+const nowEl  = document.getElementById('now');
+const player = document.getElementById('player');
+
+function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+
+// Bandcamp gates some tracks on some releases; the embed shows them greyed.
+// Say so up front so a half-streamable record isn't a surprise mid-listen.
+function meta(b){
+ if(!b.embed) return 'no Bandcamp listed';
+ const bits = [b.release || ''];
+ if(b.tracks) bits.push(`${b.tracks} tracks`, `${b.minutes} min`);
+ const gated = (b.tracks || 0) - (b.playable || 0);
+ let s = bits.filter(Boolean).join(' \u00b7 ');
+ if(gated > 0) s += ` \u00b7 <span class=gated>${gated} not streamable</span>`;
+ return s;
+}
+
+function render(){
+ listEl.innerHTML = '';
+ BANDS.forEach((b, i) => {
+  const li = document.createElement('li');
+  li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
+               + (b.embed ? '' : 'dead');
+  li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
+   + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
+   + `<span class=rel>${meta(b)}</span></span>`;
+  li.onclick = () => play(i);
+  listEl.appendChild(li);
+ });
+}
+
+function play(i){
+ const b = BANDS[i];
+ if(!b) return;
+ cur = i;
+ if(b.embed){
+  // Only rebuild the iframe when the band actually changes, so re-rendering
+  // the list never restarts playback.
+  nowEl.className = '';
+  nowEl.innerHTML = `<b>${b.name}</b> <span>&mdash; ${meta(b)}</span>`
+   + (b.url ? ` <a href="${b.url}" target=_blank rel=noopener>open &rarr;</a>` : '');
+  let f = document.getElementById('f');
+  if(!f || f.dataset.src !== b.embed){
+   if(f) f.remove();
+   f = document.createElement('iframe');
+   f.id = 'f'; f.dataset.src = b.embed; f.src = b.embed;
+   f.setAttribute('seamless','');
+   player.appendChild(f);
+  }
+ } else {
+  nowEl.className = 'none';
+  nowEl.textContent = b.name + ' \u2014 no Bandcamp listed, nothing to play';
+  const f = document.getElementById('f'); if(f) f.remove();
+ }
+ render();
+ listEl.children[i].scrollIntoView({block:'nearest'});
+}
+
+function step(d){
+ let i = cur;
+ for(let n = 0; n < BANDS.length; n++){
+  i = (i + d + BANDS.length) % BANDS.length;
+  if(BANDS[i].embed){ play(i); return; }
+ }
+}
+
+document.getElementById('next').onclick = () => step(1);
+document.getElementById('prev').onclick = () => step(-1);
+// Playback lives inside a cross-origin iframe we cannot command, so "stop"
+// means destroying the player. Pause and track-skip are Bandcamp's own
+// controls, inside the embed.
+document.getElementById('stop').onclick = () => {
+ const f = document.getElementById('f');
+ if(f) f.remove();
+ nowEl.className = 'none';
+ nowEl.textContent = cur >= 0 ? 'stopped \u2014 ' + BANDS[cur].name : 'stopped';
+};
+document.getElementById('mark').onclick = () => {
+ if(cur < 0) return;
+ const n = BANDS[cur].name;
+ heard.has(n) ? heard.delete(n) : heard.add(n);
+ save(); render();
+};
+document.getElementById('unheard').onclick = () => {
+ const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
+ if(i >= 0) play(i); else alert('all heard');
+};
+document.onkeydown = e => {
+ if(e.key === 'n') step(1);
+ if(e.key === 'p') step(-1);
+ if(e.key === 's') document.getElementById('stop').click();
+};
+render();
+</script>

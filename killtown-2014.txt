@@ -1,0 +1,33 @@
+# Kill-Town Death Fest 2014 “The Final Edition”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Anatomia                 | Japan          | https://anatomia.bandcamp.com/
+Ataraxie                 | France         | https://ataraxie.bandcamp.com/
+Ataraxy                  | Spain          | https://ataraxymuerte.bandcamp.com/
+Auroch                   | Canada         | https://auroch1.bandcamp.com/
+Bolzer                   | Switzerland    | https://bolzer.bandcamp.com/
+Bombs Of Hades           | Sweden         | https://bombs-of-hades.bandcamp.com/
+Centinex                 | Sweden         | -
+Cianide                  | United States  | https://cianide.bandcamp.com/
+Dead Congregation        | Greece         | https://deadcongregation.bandcamp.com/
+Detest                   | Denmark        | -
+Ensnared                 | Sweden         | -
+Fuoco Fatuo              | Italy          | https://fuocofatuo.bandcamp.com/
+God Macabre              | Sweden         | https://godmacabre.bandcamp.com/
+Gouge                    | Norway         | https://gouge-norway.bandcamp.com/album/beyond-death
+Imprecation              | United States  | https://imprecation666.bandcamp.com/
+Incarceration            | Brazil         | https://incarceration.bandcamp.com/
+Irkallian Oracle         | Sweden         | https://irkallianoracle.bandcamp.com/
+Krypts                   | Finland        | https://krypts.bandcamp.com/music
+Lvcifyre                 | United Kingdom | http://lvcifyre.bandcamp.com/
+Mitochondrion            | Canada         | -
+Moondark                 | Sweden         | https://moondark666.bandcamp.com/
+Obliteration             | Norway         | http://obliteration.bandcamp.com/
+Ritual Necromancy        | United States  | -
+Sonne Adam               | Israel         | -
+The Vein                 | Denmark        | https://thevein.bandcamp.com/
+Unaussprechlichen Kulten | Chile          | -
+Undergang                | Denmark        | http://undergang.bandcamp.com/
+Zombiefication           | Mexico         | https://zombiefication.bandcamp.com/

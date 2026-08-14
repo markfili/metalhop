@@ -1,0 +1,23 @@
+# Kill-Town Death Fest 2011
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Antichrist        | Sweden         | -
+Avulsed           | Spain          | http://avulsed.bandcamp.com/
+Burial Invocation | Turkey         | https://burialinvocation.bandcamp.com/
+Cerekloth         | Denmark        | -
+Cruciamentum      | United Kingdom | https://cruciamentum.bandcamp.com/
+Degial            | Sweden         | https://degial.bandcamp.com/music
+Diskord           | Norway         | https://diskord.bandcamp.com/
+Embrace Of Thorns | Greece         | http://embracethorns.bandcamp.com/
+Ensnared          | Sweden         | -
+Entrapment        | Netherlands    | https://entrapment2.bandcamp.com/
+Funebrarum        | United States  | https://funebrarum-death-metal.bandcamp.com/
+Grave Miasma      | United Kingdom | https://gravemiasma.bandcamp.com/
+Necrovation       | Sweden         | -
+Necrovorous       | Greece         | http://necrovorous.bandcamp.com/
+Sonne Adam        | Israel         | -
+Undergang         | Denmark        | http://undergang.bandcamp.com/
+Vanhelgd          | Sweden         | https://vanhelgd.bandcamp.com/
+Winterwolf        | Finland        | -

@@ -1,0 +1,141 @@
+<!doctype html><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Kill-Town Death Fest 2025 “15 Years of Death, Darkness and Decay”</title>
+<style>
+ :root{color-scheme:dark}
+ body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
+      padding:16px;max-width:760px;margin-inline:auto}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:14px}
+ #player{position:sticky;top:0;background:#111;padding:8px 0 12px;z-index:2}
+ #now{font-size:15px;margin-bottom:6px}
+ #now b{color:#fff} #now span{color:#888}
+ iframe{width:100%;max-width:400px;height:600px;border:0;display:block}
+ .gated{color:#a55;font-style:italic}
+ .none{color:#666;padding:24px 0}
+ .bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+ button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
+        padding:8px 14px;font:inherit;cursor:pointer}
+ button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
+ ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
+ li{display:flex;align-items:center;gap:10px;padding:9px 4px;
+    border-bottom:1px solid #222;cursor:pointer}
+ li:hover{background:#181818}
+ li.on{background:#1e1414;box-shadow:inset 3px 0 0 #c33}
+ li.heard .nm{color:#666;text-decoration:line-through}
+ .nm{flex:1;min-width:0} .nm b{font-weight:600}
+ .cy{color:#777;font-size:12px} .rel{color:#666;font-size:12px;display:block}
+ .dead .nm b{color:#665} .tick{color:#555;font-size:15px;width:18px;text-align:center}
+ a{color:#c33}
+</style>
+<h1>Kill-Town Death Fest 2025 “15 Years of Death, Darkness and Decay”</h1>
+<div class=sub>34 of 37 bands playable - tap a band, tap next when the record ends</div>
+<div id=player><div id=now class=none>pick a band below</div></div>
+<div class=bar>
+ <button id=prev>&larr; prev band</button>
+ <button id=next>next band &rarr;</button>
+ <button id=stop>stop</button>
+ <button id=mark>mark heard</button>
+ <button id=unheard>next unheard</button>
+</div>
+<ol id=list></ol>
+<script>
+const BANDS = [{"name": "Abhorration", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4175829455/size=large/tracklist=true/artwork=small/", "release": "Demonolatry", "url": "https://abhorration666.bandcamp.com/album/demonolatry", "note": null, "tracks": 6, "playable": 6, "minutes": 37}, {"name": "Antediluvian", "country": "Canada", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1815494265/size=large/tracklist=true/artwork=small/", "release": "Defleshing the Serpent Infinity", "url": "https://antediluvian.bandcamp.com/album/defleshing-the-serpent-infinity", "note": null, "tracks": 2, "playable": 2, "minutes": 10}, {"name": "Assumption", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4227312053/size=large/tracklist=true/artwork=small/", "release": "Hadean Tides", "url": "https://assumption.bandcamp.com/album/hadean-tides", "note": null, "tracks": 7, "playable": 7, "minutes": 56}, {"name": "Cancer", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4057077129/size=large/tracklist=true/artwork=small/", "release": "Death Shall Rise (Deluxe Edition)", "url": "https://peaceville.bandcamp.com/album/death-shall-rise-deluxe-edition", "note": null, "tracks": 18, "playable": 18, "minutes": 69}, {"name": "Castleumbra", "country": "Mexico", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Caustic Wound", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2339684703/size=large/tracklist=true/artwork=small/", "release": "Grinding Mechanism Of Torment", "url": "https://profoundlorerecords.bandcamp.com/album/grinding-mechanism-of-torment", "note": null, "tracks": 16, "playable": 16, "minutes": 28}, {"name": "Ceremonial Bloodbath", "country": "Canada", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1944172677/size=large/tracklist=true/artwork=small/", "release": "Genesis of Malignant Entropy", "url": "https://ceremonialbloodbath.bandcamp.com/album/genesis-of-malignant-entropy", "note": null, "tracks": 9, "playable": 9, "minutes": 40}, {"name": "Corpus Offal", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2300968710/size=large/tracklist=true/artwork=small/", "release": "Corpus Offal", "url": "https://listen.20buckspin.com/album/corpus-offal", "note": null, "tracks": 7, "playable": 7, "minutes": 49}, {"name": "Dusk", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2931668241/size=large/tracklist=true/artwork=small/", "release": "Dusk \"Dusk\" self-titled 1994", "url": "https://duskusaofficial.bandcamp.com/album/dusk-dusk-self-titled-1994", "note": null, "tracks": 6, "playable": 6, "minutes": 27}, {"name": "Execration", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1555462723/size=large/tracklist=true/artwork=small/", "release": "Syndicate of Lethargy (2023 Remixed & Remastered Edition)", "url": "https://execration.no/album/syndicate-of-lethargy-2023-remixed-remastered-edition", "note": null, "tracks": 9, "playable": 9, "minutes": 45}, {"name": "Fleshrot", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3952887574/size=large/tracklist=true/artwork=small/", "release": "Unburied Corpse Promo", "url": "https://fleshrottx.bandcamp.com/album/unburied-corpse-promo", "note": null, "tracks": 3, "playable": 3, "minutes": 13}, {"name": "Foetorem", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4239343620/size=large/tracklist=true/artwork=small/", "release": "Incongruous Forms Of Evergrowing Rot", "url": "https://foetorem.bandcamp.com/album/incongruous-forms-of-evergrowing-rot", "note": null, "tracks": 9, "playable": 9, "minutes": 40}, {"name": "Funeral Moth", "country": "Japan", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3184927986/size=large/tracklist=true/artwork=small/", "release": "Polar", "url": "https://funeralmoth.bandcamp.com/album/polar", "note": null, "tracks": 1, "playable": 1, "minutes": 11}, {"name": "Galvanizer", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1630928335/size=large/tracklist=true/artwork=small/", "release": "Promo 2024", "url": "https://galvanizer.bandcamp.com/album/promo-2024", "note": null, "tracks": 2, "playable": 2, "minutes": 8}, {"name": "Gravavgrav", "country": "Japan", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1107041002/size=large/tracklist=true/artwork=small/", "release": "Split with LIGATION", "url": "https://gravavgrav.bandcamp.com/album/split-with-ligation", "note": null, "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Har", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=831812025/size=large/tracklist=true/artwork=small/", "release": "Anti-Shechinah", "url": "https://harmetal.bandcamp.com/album/anti-shechinah", "note": null, "tracks": 3, "playable": 3, "minutes": 15}, {"name": "Impetuous Ritual", "country": "Australia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3338786732/size=large/tracklist=true/artwork=small/", "release": "Blight Upon Martyred Sentience", "url": "https://profoundlorerecords.bandcamp.com/album/blight-upon-martyred-sentience", "note": null, "tracks": 9, "playable": 9, "minutes": 43}, {"name": "Interment", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2375678576/size=large/tracklist=true/artwork=small/", "release": "Scent Of The Buried CD/LP", "url": "https://interment666.bandcamp.com/album/scent-of-the-buried-cd-lp-2", "note": null, "tracks": 10, "playable": 10, "minutes": 40}, {"name": "Left Cross", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1860193077/size=large/tracklist=true/artwork=small/", "release": "Upon Desecrated Altars", "url": "https://leftcross666.bandcamp.com/album/upon-desecrated-altars", "note": null, "tracks": 10, "playable": 10, "minutes": 35}, {"name": "Maceration", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1363251468/size=large/tracklist=true/artwork=small/", "release": "Serpent Devourment", "url": "https://maceration.bandcamp.com/album/serpent-devourment", "note": null, "tracks": 10, "playable": 10, "minutes": 40}, {"name": "Malformed", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2269676533/size=large/tracklist=true/artwork=small/", "release": "Confinement of Flesh", "url": "https://malformeddm.bandcamp.com/album/confinement-of-flesh", "note": null, "tracks": 9, "playable": 9, "minutes": 33}, {"name": "Mausoleum", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2900396351/size=large/tracklist=true/artwork=small/", "release": "Back From The Funeral", "url": "https://mausoleumdhr.bandcamp.com/album/back-from-the-funeral", "note": null, "tracks": 9, "playable": 9, "minutes": 35}, {"name": "Miscreance", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2406150825/size=large/tracklist=true/artwork=small/", "release": "Reminiscence", "url": "https://miscreance.bandcamp.com/album/reminiscence", "note": null, "tracks": 9, "playable": 3, "minutes": 11}, {"name": "Mitochondrion", "country": "Canada", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Moondark", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4123714948/size=large/tracklist=true/artwork=small/", "release": "The Abysmal Womb", "url": "https://moondark666.bandcamp.com/album/the-abysmal-womb", "note": null, "tracks": 8, "playable": 8, "minutes": 46}, {"name": "Morpheus Descends", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2839406080/size=large/tracklist=true/artwork=small/", "release": "From Blackened Crypts", "url": "https://darkdescentrecords.bandcamp.com/album/from-blackened-crypts", "note": null, "tracks": 2, "playable": 2, "minutes": 13}, {"name": "Necrotic Ooze", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1550268666/size=large/tracklist=true/artwork=small/", "release": "Demo", "url": "https://ironcorpse.bandcamp.com/album/demo", "note": null, "tracks": 4, "playable": 4, "minutes": 14}, {"name": "Noroth", "country": "USA", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/track=3233145748/size=large/tracklist=true/artwork=small/", "release": "Trepanation Ritual", "url": "https://noroth.bandcamp.com/track/trepanation-ritual", "note": null, "tracks": 1, "playable": 1, "minutes": 5}, {"name": "Portal", "country": "Australia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2521025399/size=large/tracklist=true/artwork=small/", "release": "Hagbulbia", "url": "https://profoundlorerecords.bandcamp.com/album/hagbulbia", "note": null, "tracks": 5, "playable": 5, "minutes": 38}, {"name": "Purulency", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=914862954/size=large/tracklist=true/artwork=small/", "release": "Transcendent Unveiling of Dimensions", "url": "https://caligarirecords.bandcamp.com/album/transcendent-unveiling-of-dimensions", "note": null, "tracks": 4, "playable": 4, "minutes": 18}, {"name": "Reverence to Paroxysm", "country": "Mexico", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=178430304/size=large/tracklist=true/artwork=small/", "release": "Lux Morte", "url": "https://mesacounojo.bandcamp.com/album/lux-morte", "note": null, "tracks": 6, "playable": 6, "minutes": 45}, {"name": "Rippikoulu", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=593467452/size=large/tracklist=true/artwork=small/", "release": "Musta seremonia", "url": "https://rippikoulu.bandcamp.com/album/musta-seremonia", "note": null, "tracks": 6, "playable": 6, "minutes": 31}, {"name": "Ruinous Power", "country": "Canada", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2850126753/size=large/tracklist=true/artwork=small/", "release": "EXTREME DANGER: Prototype Weaponry", "url": "https://i-voidhangerrecords.bandcamp.com/album/extreme-danger-prototype-weaponry", "note": null, "tracks": 7, "playable": 7, "minutes": 28}, {"name": "Sanctuarium", "country": "Spain", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2905108637/size=large/tracklist=true/artwork=small/", "release": "Melted and Decomposed", "url": "https://sanctuarium.bandcamp.com/album/melted-and-decomposed", "note": null, "tracks": 5, "playable": 5, "minutes": 48}, {"name": "Sewer Haul", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2909286241/size=large/tracklist=true/artwork=small/", "release": "TORSO MANGLED BEYOND REPAIR", "url": "https://sewerhaul.bandcamp.com/album/torso-mangled-beyond-repair", "note": null, "tracks": 5, "playable": 5, "minutes": 6}, {"name": "Trollcave", "country": "Spain", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=339749259/size=large/tracklist=true/artwork=small/", "release": "Adoration Of The Abyssal Trespasser", "url": "https://trollcave666.bandcamp.com/album/adoration-of-the-abyssal-trespasser", "note": null, "tracks": 2, "playable": 2, "minutes": 31}, {"name": "Vacuous", "country": "United Kingdom", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}];
+const KEY = 'metalhop:kill-town-death-fest-2025-15-years-of-death-darkness-and-decay';
+let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let cur = -1;
+
+const listEl = document.getElementById('list');
+const nowEl  = document.getElementById('now');
+const player = document.getElementById('player');
+
+function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+
+// Bandcamp gates some tracks on some releases; the embed shows them greyed.
+// Say so up front so a half-streamable record isn't a surprise mid-listen.
+function meta(b){
+ if(!b.embed) return 'no Bandcamp listed';
+ const bits = [b.release || ''];
+ if(b.tracks) bits.push(`${b.tracks} tracks`, `${b.minutes} min`);
+ const gated = (b.tracks || 0) - (b.playable || 0);
+ let s = bits.filter(Boolean).join(' \u00b7 ');
+ if(gated > 0) s += ` \u00b7 <span class=gated>${gated} not streamable</span>`;
+ return s;
+}
+
+function render(){
+ listEl.innerHTML = '';
+ BANDS.forEach((b, i) => {
+  const li = document.createElement('li');
+  li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
+               + (b.embed ? '' : 'dead');
+  li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
+   + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
+   + `<span class=rel>${meta(b)}</span></span>`;
+  li.onclick = () => play(i);
+  listEl.appendChild(li);
+ });
+}
+
+function play(i){
+ const b = BANDS[i];
+ if(!b) return;
+ cur = i;
+ if(b.embed){
+  // Only rebuild the iframe when the band actually changes, so re-rendering
+  // the list never restarts playback.
+  nowEl.className = '';
+  nowEl.innerHTML = `<b>${b.name}</b> <span>&mdash; ${meta(b)}</span>`
+   + (b.url ? ` <a href="${b.url}" target=_blank rel=noopener>open &rarr;</a>` : '');
+  let f = document.getElementById('f');
+  if(!f || f.dataset.src !== b.embed){
+   if(f) f.remove();
+   f = document.createElement('iframe');
+   f.id = 'f'; f.dataset.src = b.embed; f.src = b.embed;
+   f.setAttribute('seamless','');
+   player.appendChild(f);
+  }
+ } else {
+  nowEl.className = 'none';
+  nowEl.textContent = b.name + ' \u2014 no Bandcamp listed, nothing to play';
+  const f = document.getElementById('f'); if(f) f.remove();
+ }
+ render();
+ listEl.children[i].scrollIntoView({block:'nearest'});
+}
+
+function step(d){
+ let i = cur;
+ for(let n = 0; n < BANDS.length; n++){
+  i = (i + d + BANDS.length) % BANDS.length;
+  if(BANDS[i].embed){ play(i); return; }
+ }
+}
+
+document.getElementById('next').onclick = () => step(1);
+document.getElementById('prev').onclick = () => step(-1);
+// Playback lives inside a cross-origin iframe we cannot command, so "stop"
+// means destroying the player. Pause and track-skip are Bandcamp's own
+// controls, inside the embed.
+document.getElementById('stop').onclick = () => {
+ const f = document.getElementById('f');
+ if(f) f.remove();
+ nowEl.className = 'none';
+ nowEl.textContent = cur >= 0 ? 'stopped \u2014 ' + BANDS[cur].name : 'stopped';
+};
+document.getElementById('mark').onclick = () => {
+ if(cur < 0) return;
+ const n = BANDS[cur].name;
+ heard.has(n) ? heard.delete(n) : heard.add(n);
+ save(); render();
+};
+document.getElementById('unheard').onclick = () => {
+ const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
+ if(i >= 0) play(i); else alert('all heard');
+};
+document.onkeydown = e => {
+ if(e.key === 'n') step(1);
+ if(e.key === 'p') step(-1);
+ if(e.key === 's') document.getElementById('stop').click();
+};
+render();
+</script>

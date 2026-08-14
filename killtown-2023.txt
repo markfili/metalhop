@@ -1,0 +1,42 @@
+# Kill-Town Death Fest 2023 “The Carrion Cathering”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Abhorration         | Norway         | https://abhorration666.bandcamp.com/releases
+Altars              | Australia      | https://altarsdeath.bandcamp.com/album/paramnesia
+Anatomia            | Japan          | https://anatomia.bandcamp.com/
+Aphotic             | Italy          | -
+Apparition          | United States  | https://apparitiondeath.bandcamp.com/
+Ascended Dead       | United States  | https://ascended-dead.bandcamp.com/
+Autophagy           | United States  | https://autophagypdx.bandcamp.com/music
+Bell Witch          | United States  | https://bellwitch.bandcamp.com/
+Benediction         | United Kingdom | -
+Bones               | Belgium        | https://exposedbones.bandcamp.com/
+Burial              | Italy          | https://burialdeath.bandcamp.com/
+Civerous            | United States  | https://civerous.bandcamp.com/
+Convulse            | Finland        | https://convulsefinland.bandcamp.com/music
+Cystic              | United States  | https://cystic666.bandcamp.com/
+Degraved            | United States  | https://degraved.bandcamp.com/
+Deteriorot          | United States  | https://deteriorot.bandcamp.com/
+Drowned             | Germany        | http://drowned.bandcamp.com/
+Druid Lord          | United States  | https://druidlord.bandcamp.com/music
+Egregore            | Canada         | -
+Fossilization       | Brazil         | https://everlastingspew.bandcamp.com/album/advent-of-wounds
+Fossilization(old)  | Brazil         | https://fossilization.bandcamp.com/
+Fuoco Fatuo         | Italy          | https://fuocofatuo.bandcamp.com/
+God Forsaken        | Finland        | https://godforsaken2.bandcamp.com/
+Gosudar             | Russia         | https://gosudardeath.bandcamp.com/
+Grave Infestation   | Canada         | https://graveinfestation.bandcamp.com/releases
+Gutless             | Australia      | https://gutlessmelbourne.bandcamp.com/releases
+Of Feather And Bone | United States  | https://offeatherandbone666.bandcamp.com/
+Ossuary             | United States  | https://ossuary-death.bandcamp.com/music
+Phobophilic         | United States  | https://phobophilic.bandcamp.com/
+Sedimentum          | Canada         | https://sedimentum.bandcamp.com/music
+Slimelord           | United Kingdom | https://slimelord.bandcamp.com/
+Strychnos           | Denmark        | https://strychnos.bandcamp.com/
+Sulphurous          | Denmark        | https://sulphurous.bandcamp.com/
+Teratoma            | Germany        | https://teratomadeathmetal.bandcamp.com/
+Transgressor        | Japan          | https://tanakashoten.bandcamp.com/album/transgressor-ether-for-scapegoat
+V. V. V.            | Sweden         | https://visionaryvexationsvibrations.bandcamp.com/
+Vanhelgd            | Sweden         | https://vanhelgd.bandcamp.com/

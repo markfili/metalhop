@@ -1,0 +1,42 @@
+# Kill-Town Death Fest 2025 “15 Years of Death, Darkness and Decay”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Abhorration           | Norway         | https://abhorration666.bandcamp.com/releases
+Antediluvian          | Canada         | https://antediluvian.bandcamp.com/
+Assumption            | Italy          | https://assumption.bandcamp.com/music
+Cancer                | United Kingdom | https://peaceville.bandcamp.com/album/death-shall-rise-deluxe-edition
+Castleumbra           | Mexico         | -
+Caustic Wound         | United States  | https://profoundlorerecords.bandcamp.com/album/grinding-mechanism-of-torment
+Ceremonial Bloodbath  | Canada         | https://ceremonialbloodbath.bandcamp.com/
+Corpus Offal          | United States  | https://20buckspin.bandcamp.com/album/corpus-offal
+Dusk                  | United States  | http://duskusaofficial.bandcamp.com/
+Execration            | Norway         | https://execration.bandcamp.com/
+Fleshrot              | United States  | http://fleshrottx.bandcamp.com/
+Foetorem              | Denmark        | https://foetorem.bandcamp.com/
+Funeral Moth          | Japan          | https://funeralmoth.bandcamp.com/
+Galvanizer            | Finland        | https://galvanizer.bandcamp.com/
+Gravavgrav            | Japan          | https://gravavgrav.bandcamp.com/
+Har                   | Germany        | https://harmetal.bandcamp.com/
+Impetuous Ritual      | Australia      | https://profoundlorerecords.bandcamp.com/album/blight-upon-martyred-sentience
+Interment             | Sweden         | https://interment666.bandcamp.com/
+Left Cross            | United States  | https://leftcross666.bandcamp.com/
+Maceration            | Denmark        | https://maceration.bandcamp.com/
+Malformed             | Finland        | https://malformeddm.bandcamp.com/
+Mausoleum             | United States  | http://mausoleumdhr.bandcamp.com/
+Miscreance            | Italy          | http://miscreance.bandcamp.com/
+Mitochondrion         | Canada         | -
+Moondark              | Sweden         | https://moondark666.bandcamp.com/
+Morpheus Descends     | United States  | https://darkdescentrecords.bandcamp.com/album/from-blackened-crypts
+Necrotic Ooze         | Finland        | https://ironcorpse.bandcamp.com/album/demo
+Noroth                | USA            | https://noroth.bandcamp.com/
+Portal                | Australia      | https://profoundlorerecords.bandcamp.com/album/hagbulbia
+Purulency             | United States  | https://caligarirecords.bandcamp.com/album/transcendent-unveiling-of-dimensions
+Reverence to Paroxysm | Mexico         | https://mesacounojo.bandcamp.com/album/lux-morte
+Rippikoulu            | Finland        | https://rippikoulu.bandcamp.com/
+Ruinous Power         | Canada         | https://i-voidhangerrecords.bandcamp.com/album/extreme-danger-prototype-weaponry
+Sanctuarium           | Spain          | https://sanctuarium.bandcamp.com/
+Sewer Haul            | Denmark        | https://sewerhaul.bandcamp.com/
+Trollcave             | Spain          | https://trollcave666.bandcamp.com/
+Vacuous               | United Kingdom | -

@@ -1,0 +1,24 @@
+# Kill-Town Death Fest 2024 London
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Aberration        | United States  | https://aberrationdeath.bandcamp.com/
+Abyssal           | United Kingdom | http://abyssal-home.bandcamp.com/
+Adversarial       | Canada         | -
+Anatomia          | Japan          | https://anatomia.bandcamp.com/
+Coffin Mulch      | United Kingdom | http://coffinmulch.bandcamp.com/
+Concrete Winds    | Finland        | https://concretewinds.bandcamp.com/
+Cryptworm         | United Kingdom | https://cryptworm.bandcamp.com/
+Druid Lord        | United States  | https://druidlord.bandcamp.com/music
+Fessus            | Austria        | https://fessus.bandcamp.com/
+Fuoco Fatuo       | Italy          | https://fuocofatuo.bandcamp.com/
+Killing Addiction | United States  | https://killingaddiction.bandcamp.com/music
+Left Cross        | United States  | https://leftcross666.bandcamp.com/
+Mortem            | Peru           | -
+Mortuary Spawn    | United Kingdom | https://mortuaryspawn.bandcamp.com/
+Ossuary           | United States  | https://ossuary-death.bandcamp.com/music
+Phobocosm         | Canada         | https://darkdescentrecords.bandcamp.com/album/gateway
+Rippikoulu        | Finland        | https://rippikoulu.bandcamp.com/
+Slimelord         | United Kingdom | https://slimelord.bandcamp.com/
+Vaticinal Rites   | United Kingdom | https://vaticinalrites.bandcamp.com/releases

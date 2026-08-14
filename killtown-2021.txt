@@ -1,0 +1,18 @@
+# Kill-Town Death Fest 2021 “Corona Edition”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Bastard Grave         | Sweden         | https://bastardgrave.bandcamp.com/
+Chaotian              | Denmark        | https://chaotian.bandcamp.com/
+Concrete Winds        | Finland        | https://concretewinds.bandcamp.com/
+Dead Void             | Denmark        | https://deadvoid.bandcamp.com/
+Demilich              | Finland        | https://demilich.bandcamp.com/releases
+Fuoco Fatuo           | Italy          | https://fuocofatuo.bandcamp.com/
+Ghastly               | Finland        | https://ghastly.bandcamp.com/
+Grave Miasma          | United Kingdom | https://gravemiasma.bandcamp.com/
+Krypts                | Finland        | https://krypts.bandcamp.com/music
+Septage               | Denmark        | https://septage.bandcamp.com/music
+Strychnos             | Denmark        | https://strychnos.bandcamp.com/
+Tardus Mortem         | Denmark        | https://tardusmortem.bandcamp.com/
+The Funeral Orchestra | Sweden         | https://thefuneralorchestra.bandcamp.com/

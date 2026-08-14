@@ -1,0 +1,26 @@
+# Kill-Town Death Fest 2010
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Anatomia          | Japan         | https://anatomia.bandcamp.com/
+Ascended          | Finland       | -
+Bloody Sign       | France        | -
+Burial Invocation | Turkey        | https://burialinvocation.bandcamp.com/
+Corpus Mortale    | Denmark       | -
+Crucifyre         | Sweden        | -
+Dead Congregation | Greece        | https://deadcongregation.bandcamp.com/
+Deus Otiosus      | Denmark       | http://deusotiosus.bandcamp.com/
+Krypts            | Finland       | https://krypts.bandcamp.com/music
+Maim              | Sweden        | http://maimdeathmetal.bandcamp.com/
+Miasmal           | Sweden        | -
+Necrowretch       | France        | https://necrowretch.bandcamp.com/
+Nominon           | Sweden        | -
+Obliteration      | Norway        | http://obliteration.bandcamp.com/
+Putrid            | Sweden        | -
+Stench            | Sweden        | -
+Stench Of Decay   | Finland       | -
+Strychnos         | Denmark       | https://strychnos.bandcamp.com/
+Swallowed         | Finland       | https://swallowed.bandcamp.com/
+Undergang         | Denmark       | http://undergang.bandcamp.com/
+Vorum             | Åland Islands | http://vorum.bandcamp.com/

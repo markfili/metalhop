@@ -23,11 +23,45 @@ Archives zero times, so it works regardless of the above.
 
 ```bash
 python3 metalhop.py --list killtown-2026.txt --build index.html
+python3 metalhop.py --list killtown-20*.txt --build .        # one page each
 ```
 
 Resolution costs at most two Bandcamp fetches per band, rate-limited to one per
 second, so ~36 bands takes about a minute. Album IDs are permanent, so the page
 keeps working indefinitely without rebuilding.
+
+Given several lineup files, `--build` names a **directory** and each lineup
+becomes `<lineup-name>.html`. Bandcamp answers are cached for the run, so a
+band that played six editions is resolved once, not six times — building the
+whole archive costs about the same as building its largest few editions.
+
+**Landing page (`--index`)** — links every built edition page, with band
+counts, playable counts and runtime read back out of the pages themselves. It
+touches no network at all, so rerun it after any rebuild:
+
+```bash
+python3 metalhop.py --index          # writes index.html
+```
+
+Each edition page records what you have heard under its own `localStorage`
+key; the index reads those keys, so it shows your progress per edition without
+opening any of them.
+
+**Kill-Town lineups (`--fest`)** — the festival publishes every past edition it
+has ever run, and every band's own page carries that band's country and
+Bandcamp link. `--fest` turns those into lineup files, which the build mode
+above then turns into pages.
+
+```bash
+python3 metalhop.py --fest                  # list the 14 past editions
+python3 metalhop.py --fest 2019 2018        # write killtown-2019.txt, killtown-2018.txt
+python3 metalhop.py --fest --fest-recent 10 # the 10 most recent
+```
+
+Band pages are fetched once each and reused across editions, so the 10 most
+recent editions cost 195 fetches rather than 253 — about four minutes at one
+request per second. Bands that recur (Rippikoulu has played four times) are
+fetched once.
 
 ## The lineup file
 

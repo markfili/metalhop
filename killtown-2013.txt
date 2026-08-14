@@ -1,0 +1,29 @@
+# Kill-Town Death Fest 2013
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Alchemyst        | Germany        | -
+Anhedonist       | United States  | -
+Apothecary       | Denmark        | -
+Blaspherian      | United States  | -
+Cadaveric Fumes  | France         | https://cadavericfumes.bandcamp.com/
+Convulse         | Finland        | https://convulsefinland.bandcamp.com/music
+Death Strike     | United States  | -
+Drowned          | Germany        | http://drowned.bandcamp.com/
+Engulfed         | Turkey         | https://engulfed.bandcamp.com/
+Entrails         | Sweden         | https://entrails666.bandcamp.com/
+Essenz           | Germany        | https://essenz.bandcamp.com/
+Exhumed          | United States  | https://exhumed.bandcamp.com/
+Funeralium       | France         | https://funeralium.bandcamp.com/
+Indesinence      | United Kingdom | -
+Into Darkness    | Italy          | https://intodarkness.bandcamp.com/
+Katechon         | Norway         | https://katechon.bandcamp.com/
+Lantern          | Finland        | -
+Obscure Infinity | Germany        | -
+Ogdru Jahad      | Denmark        | -
+Ophis            | Germany        | https://ophis.bandcamp.com/
+Pentacle         | Netherlands    | -
+Reverie          | Denmark        | https://eirever.bandcamp.com/
+Rottrevore       | United States  | https://xtreemmusic.bandcamp.com/album/iniquitous
+Tribulation      | Sweden         | -

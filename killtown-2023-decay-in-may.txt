@@ -1,0 +1,11 @@
+# Kill-Town Death Fest Decay In May 2023
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Discipel    | Denmark        | https://discipel.bandcamp.com/
+Execration  | Norway         | https://execration.bandcamp.com/
+Galvanizer  | Finland        | https://galvanizer.bandcamp.com/
+Ghastly     | Finland        | https://ghastly.bandcamp.com/
+Hyperdontia | Turkey/Denmark | https://hyperdontiaofficial.bandcamp.com/music
+Morbific    | Finland        | https://morbific.bandcamp.com/

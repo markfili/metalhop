@@ -1,0 +1,45 @@
+# Kill-Town Death Fest 2019 “The Decompomorphosis”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Abhorrence          | Finland       | https://abhorrencefin.bandcamp.com/
+Abysmal Dimensions  | United States | -
+Adversarial         | Canada        | -
+Anatomia            | Japan         | https://anatomia.bandcamp.com/
+Antediluvian        | Canada        | https://antediluvian.bandcamp.com/
+Assumption          | Italy         | https://assumption.bandcamp.com/music
+Bastard Grave       | Sweden        | https://bastardgrave.bandcamp.com/
+Black Curse         | United States | https://blackcurse-svr.bandcamp.com/
+Chaotian            | Denmark       | https://chaotian.bandcamp.com/
+Chtheilist          | Canada        | -
+Coffins             | Japan         | https://coffins.bandcamp.com/
+Corpsessed          | Finland       | https://corpsessed.bandcamp.com/
+Dead Void           | Denmark       | https://deadvoid.bandcamp.com/
+Drowned             | Germany       | http://drowned.bandcamp.com/
+Druid Lord          | United States | https://druidlord.bandcamp.com/music
+Funebrarum          | United States | https://funebrarum-death-metal.bandcamp.com/
+Funeral Moth        | Japan         | https://funeralmoth.bandcamp.com/
+Ghastly             | Finland       | https://ghastly.bandcamp.com/
+Grave               | Sweden        | -
+Har                 | Germany       | https://harmetal.bandcamp.com/
+Ignivomous          | Australia     | -
+Kever               | Israel        | https://kever.bandcamp.com/
+Lucifericon         | Netherlands   | https://lucifericon.bandcamp.com/
+Malthusian          | Ireland       | http://malthusian.bandcamp.com/
+Mitochondrion       | Canada        | -
+Mortuous            | United States | https://mortuousdeath.bandcamp.com/
+Necrovation         | Sweden        | -
+Obliteration        | Norway        | http://obliteration.bandcamp.com/
+Of Feather And Bone | United States | https://offeatherandbone666.bandcamp.com/
+Phobocosm           | Canada        | https://darkdescentrecords.bandcamp.com/album/gateway
+Profetus            | Finland       | https://profetus.bandcamp.com/
+Ritual Necromancy   | United States | -
+Suffering Hour      | United States | https://sufferinghour.bandcamp.com/
+Superstition        | United States | https://superstitiondeath.bandcamp.com/
+Taphos              | Denmark       | https://taphos.bandcamp.com/music
+Tchornobog          | United States | https://markovsoroka.bandcamp.com/album/tchornobog
+The Dead Creed      | Greece        | https://thedeadcreed.bandcamp.com/
+Tomb Mold           | Canada        | https://tombmold.bandcamp.com/
+Transgressor        | Japan         | https://tanakashoten.bandcamp.com/album/transgressor-ether-for-scapegoat
+Vastum              | United States | https://vastum.bandcamp.com/

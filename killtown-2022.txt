@@ -1,0 +1,40 @@
+# Kill-Town Death Fest 2022 “Ridden with Disease”
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Acephalix             | United States                  | https://acephalix.bandcamp.com/
+Ascendency            | Denmark                        | https://prophesiedascendency.bandcamp.com/releases
+Asphyx                | Netherlands                    | -
+Astriferous           | Costa Rica                     | https://astriferous.bandcamp.com/
+Bloodsoaked Necrovoid | Costa Rica                     | https://bloodsoakednecrovoid.bandcamp.com/
+Burial Invocation     | Turkey                         | https://burialinvocation.bandcamp.com/
+Carcinoid             | Australia                      | https://carcinoid.bandcamp.com/
+Cavurn                | United States                  | https://cavurn.bandcamp.com/
+Cerebral Rot          | United States of America (the) | -
+Concrete Winds        | Finland                        | https://concretewinds.bandcamp.com/
+Cryptic Brood         | Germany                        | https://crypticbrood.bandcamp.com/
+Dead Congregation     | Greece                         | https://deadcongregation.bandcamp.com/
+Deathcult             | Switzerland                    | -
+Encoffination         | United States of America (the) | https://encoffination.bandcamp.com/releases
+Engulfed              | Turkey                         | https://engulfed.bandcamp.com/
+Faceless Burial       | Australia                      | https://facelessburial.bandcamp.com/music
+Father Befouled       | United States                  | https://fatherbefouled.bandcamp.com/
+Gorephilia            | Finland                        | https://gorephilia.bandcamp.com/
+Harrowed              | Sweden                         | https://harroweddeathmetal.bandcamp.com/
+Hyperdontia           | Turkey/Denmark                 | https://hyperdontiaofficial.bandcamp.com/music
+Innumerable Forms     | United States of America (the) | https://innumerableforms.bandcamp.com/
+Interment             | Sweden                         | https://interment666.bandcamp.com/
+Kommand               | United States of America (the) | https://kommand-maggotstomp.bandcamp.com/
+Krypts                | Finland                        | https://krypts.bandcamp.com/music
+Morta Skuld           | United States                  | https://mortaskuld.bandcamp.com/
+Mortal Wound          | United States of America (the) | https://mortalwound.bandcamp.com/music
+Mortiferum            | United States of America (the) | https://mortiferum.bandcamp.com/
+Ossuary               | United States                  | https://ossuary-death.bandcamp.com/music
+Proscription          | Finland                        | https://proscription.bandcamp.com/
+Septage               | Denmark                        | https://septage.bandcamp.com/music
+Sijjin                | Germany                        | https://sijjin.bandcamp.com/music
+Sněť                  | Czechia                        | https://snet.bandcamp.com/
+Vanhelgd              | Sweden                         | https://vanhelgd.bandcamp.com/
+Void Rot              | United States                  | https://voidrot.bandcamp.com/
+Witch Vomit           | United States of America (the) | https://witchvomit1.bandcamp.com/music

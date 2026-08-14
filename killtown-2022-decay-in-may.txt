@@ -1,0 +1,15 @@
+# Kill-Town Death Fest Decay In May 2022
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Bastard Grave       | Sweden         | https://bastardgrave.bandcamp.com/
+Bedsore             | Italy          | https://bedsoredeath.bandcamp.com/
+Cryptic Shift       | United Kingdom | https://cryptic-shift.bandcamp.com/
+Gorephilia          | Finland        | https://gorephilia.bandcamp.com/
+Haunter             | United States  | https://hauntertx.bandcamp.com/
+Imperious Mortality | Denmark        | https://imperiousmortality.bandcamp.com/
+Rippikoulu          | Finland        | https://rippikoulu.bandcamp.com/
+Septage             | Denmark        | https://septage.bandcamp.com/music
+Suffering Hour      | United States  | https://sufferinghour.bandcamp.com/
+Tardus Mortem       | Denmark        | https://tardusmortem.bandcamp.com/

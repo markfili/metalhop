@@ -1,0 +1,29 @@
+# Kill-Town Death Fest 2012
+# Parsed from https://www.killtowndeathfest.com/past-editions/ and each band's own page on the same site.
+# Format:  Band Name | Country | Bandcamp URL   ("-" = no Bandcamp listed)
+# An artist root resolves to the newest release; a direct /album/ URL pins that one.
+
+Chaos Echoes    | France         | https://chaosechoes.bandcamp.com/
+Church Bizarre  | Denmark        | -
+Corpsessed      | Finland        | https://corpsessed.bandcamp.com/
+Cryptborn       | Finland        | -
+Esoteric        | United Kingdom | https://esotericuk.bandcamp.com/
+Execration      | Norway         | https://execration.bandcamp.com/
+Fleshless       | Czechia        | https://fleshless.bandcamp.com/releases
+General Surgery | Sweden         | https://generalsurgery.bandcamp.com/
+Hooded Menace   | Finland        | http://hoodedmenace.bandcamp.com/
+Interment       | Sweden         | https://interment666.bandcamp.com/
+Master          | United States  | -
+Maveth          | Finland        | -
+Mold            | Denmark        | https://moldycorpse.bandcamp.com/
+Morbus Chron    | Sweden         | -
+Necros Christos | Germany        | https://necroschristos.bandcamp.com/
+Pustulation     | Denmark        | -
+Ritualization   | France         | -
+Sadistic Intent | United States  | -
+Swallowed       | Finland        | https://swallowed.bandcamp.com/
+Tyranny         | Finland        | https://tyrannyfuneraldoom.bandcamp.com/
+Undead Creep    | Italy          | http://undeadcreep.bandcamp.com/
+Verminous       | Sweden         | http://verminous.bandcamp.com/
+Voids Of Vomit  | Italy          | http://voidsofvomit.bandcamp.com/
+Zom             | Ireland        | http://zom666.bandcamp.com/

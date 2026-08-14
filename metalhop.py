@@ -20,6 +20,7 @@ terminal.
 """
 
 import argparse
+import glob
 import html
 import json
 import os
@@ -29,6 +30,8 @@ import subprocess
 import sys
 import threading
 import time
+import unicodedata
+from collections import OrderedDict
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 try:
@@ -38,15 +41,19 @@ except ImportError:
     sys.exit("Missing deps. Run: apt install python3-requests python3-bs4")
 
 BASE = "https://www.metal-archives.com"
+KTDF = "https://www.killtowndeathfest.com"
 CONTACT = "you@example.com"          # <- put a real contact here
 UA = f"metalhop/0.2 (personal, non-commercial; {CONTACT})"
 MA_INTERVAL = 1.5                    # seconds between MA requests
 BC_INTERVAL = 1.0                    # seconds between Bandcamp requests
+KTDF_INTERVAL = 1.0                  # seconds between killtowndeathfest.com requests
+
+INTERVALS = {"ma": MA_INTERVAL, "bc": BC_INTERVAL, "ktdf": KTDF_INTERVAL}
 
 session = requests.Session()
 session.headers.update({"User-Agent": UA, "Accept": "*/*"})
 
-_last = {"ma": 0.0, "bc": 0.0}
+_last = {host: 0.0 for host in INTERVALS}
 _lock = threading.Lock()
 CURRENT = {"band": None, "url": None, "embed": None, "meta": "", "rev": 0}
 
@@ -59,7 +66,7 @@ class Blocked(RuntimeError):
 
 def get(url, host="ma", **kwargs):
     """Rate-limited GET, per-host budget."""
-    interval = MA_INTERVAL if host == "ma" else BC_INTERVAL
+    interval = INTERVALS[host]
     wait = interval - (time.monotonic() - _last[host])
     if wait > 0:
         time.sleep(wait)
@@ -160,6 +167,194 @@ def bandcamp_links(band_id):
             seen.add(a["href"])
             found.append(a["href"])
     return found
+
+
+# ---------- kill-town death fest lineups ----------
+
+# The fest publishes its own past lineups, so an edition's list of bands and
+# each band's own Bandcamp link come from the organiser rather than from Metal
+# Archives. That keeps hard rule 1 intact: nothing of MA's database is written
+# to disk here, and what is written is one festival's public bill.
+
+SOCIAL = re.compile(r"bandcamp\.com|facebook\.com|instagram\.com|spotify\.com")
+
+SMALL_WORDS = {"the", "of", "and"}
+
+
+def _tidy(text):
+    """Fold the site's SHOUTED entries down to the lineup files' title case.
+
+    Bands on the current bill are written in caps on the fest site, which would
+    otherwise leave the same band as 'Cryptworm' in one edition's file and
+    'CRYPTWORM' in another. Short tokens are left alone so acronyms survive:
+    'USA' and 'V. V. V.' are not mistakes to fix.
+    """
+    if not text.isupper():
+        return text
+    return " ".join(w.lower() if w.lower() in SMALL_WORDS
+                    else w if len(w) <= 3 else w.capitalize()
+                    for w in text.split())
+
+
+def _edition_key(heading, keys):
+    """Match a section heading to the CSS class the fest tags its bands with.
+
+    Headings read '2023 "The Carrion Cathering"' or 'Decay In May 2023'; the
+    classes read '2023' and '2023-decay-in-may'. Year alone is ambiguous in
+    exactly the years that also had a Decay In May, so the tie is broken on the
+    words the two share, and failing that on the shorter (plain-year) key.
+    """
+    year = re.search(r"(19|20)\d\d", heading)
+    if not year:
+        return None
+    cands = [k for k in keys if k.startswith(year.group(0))]
+    if not cands:
+        return None
+    words = set(re.findall(r"[a-z]+", heading.lower()))
+    return sorted(cands, key=lambda k: (-len(words & set(k.split("-"))), len(k)))[0]
+
+
+def fest_editions():
+    """Every past edition and its bands, from one fetch of /past-editions/.
+
+    Membership comes from the class list on each band tile ('portfolio-box
+    hidden 2019 2025') and not from which grid the tile sits in: the last grid
+    on the page is unfiltered and repeats every band the fest has ever booked,
+    so reading grids positionally credits all 258 of them to 2010.
+    """
+    soup = BeautifulSoup(get(f"{KTDF}/past-editions/", host="ktdf").text,
+                         "html.parser")
+
+    members = {}
+    for box in soup.find_all("div", class_="portfolio-box"):
+        a = box.find("a", href=re.compile(r"/band/"))
+        title = box.find(class_="portfolio-title")
+        m = re.search(r"/band/([^/]+)/", a["href"]) if a else None
+        if not m or not title:
+            continue
+        for cls in box.get("class", []):
+            if cls in ("portfolio-box", "hidden"):
+                continue
+            members.setdefault(cls, OrderedDict()).setdefault(
+                m.group(1), title.get_text(strip=True))
+
+    editions, seen = [], set()
+    for h2 in soup.find_all("h2"):
+        if "portfolio-title" in (h2.get("class") or []):
+            continue
+        heading = h2.get_text(strip=True)
+        key = _edition_key(heading, members)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        # Sorted, because tile order here is first-appearance across the whole
+        # page rather than each edition's own alphabetical grid: a band that
+        # also played a later edition would otherwise jump to the top.
+        editions.append({
+            "key": key,
+            "title": heading,
+            "bands": sorted(({"slug": s, "name": _tidy(n)}
+                             for s, n in members[key].items()),
+                            key=lambda b: b["name"].casefold()),
+        })
+    return editions
+
+
+def fest_band(slug):
+    """Country, label and Bandcamp URL from one band's page on the fest site."""
+    soup = BeautifulSoup(get(f"{KTDF}/band/{slug}/", host="ktdf").text,
+                         "html.parser")
+    title = soup.find(class_="portfolio_item_title")
+    rec = {"slug": slug, "name": title.get_text(strip=True) if title else slug,
+           "country": "", "label": "", "url": ""}
+
+    content = soup.find("div", class_="entry-content-portfolio")
+    if not content:
+        return rec
+    link = content.find("a", href=re.compile(r"bandcamp\.com"))
+    if link:
+        rec["url"] = link["href"].strip()
+
+    # The 'Country · Label' line sits directly above the row of social icons.
+    # Taking the first <p> instead would get a logo image on the many pages
+    # that open with one, so this walks back from the social row, and skips
+    # long paragraphs because pages without a social row would otherwise
+    # hand back the first line of the band's bio.
+    paras = content.find_all("p")
+    social = next((i for i, p in enumerate(paras) if p.find("a", href=SOCIAL)),
+                  len(paras))
+    for p in reversed(paras[:social]):
+        text = p.get_text(" ", strip=True)
+        if text and len(text) < 120:
+            bits = [b.strip() for b in re.split(r"[·|]", text)]
+            rec["country"] = _tidy(bits[0])
+            rec["label"] = bits[1] if len(bits) > 1 else ""
+            break
+    return rec
+
+
+def write_lineup(path, edition, rows):
+    """Write an edition as a lineup file --list can read back."""
+    nw = max([len(r["name"]) for r in rows] + [4])
+    cw = max([len(r["country"]) for r in rows] + [7])
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(f"# Kill-Town Death Fest {edition['title']}\n"
+                 f"# Parsed from {KTDF}/past-editions/ and each band's own"
+                 f" page on the same site.\n"
+                 f"# Format:  Band Name | Country | Bandcamp URL"
+                 f"   (\"-\" = no Bandcamp listed)\n"
+                 f"# An artist root resolves to the newest release;"
+                 f" a direct /album/ URL pins that one.\n\n")
+        for r in rows:
+            fh.write(f"{r['name']:<{nw}} | {r['country'] or '?':<{cw}} | "
+                     f"{r['url'] or '-'}\n")
+    return path
+
+
+def fest_mode(args):
+    """--fest: turn published past lineups into lineup files."""
+    editions = fest_editions()
+    by_key = {e["key"]: e for e in editions}
+
+    wanted = [by_key[k] for k in args.fest if k in by_key]
+    for k in args.fest:
+        if k not in by_key:
+            print(f"  unknown edition {k!r}")
+    if args.fest_recent:
+        wanted = editions[:args.fest_recent]
+    if not wanted:
+        print(f"{len(editions)} past editions on the site "
+              "(newest first). Pass keys to --fest, or use --fest-recent N.\n")
+        for e in editions:
+            print(f"  {e['key']:<20} {len(e['bands']):>3} bands   {e['title']}")
+        return
+
+    total = sum(len(e["bands"]) for e in wanted)
+    print(f"{len(wanted)} editions, {total} slots "
+          f"(band pages are fetched once each and reused across editions)\n")
+
+    cache = {}
+    for e in wanted:
+        print(f"== {e['title']}  [{e['key']}]  {len(e['bands'])} bands")
+        rows = []
+        for i, b in enumerate(e["bands"], 1):
+            if b["slug"] not in cache:
+                try:
+                    cache[b["slug"]] = fest_band(b["slug"])
+                except Exception as exc:
+                    cache[b["slug"]] = {"country": "", "label": "", "url": "",
+                                        "note": f"{type(exc).__name__}: {exc}"}
+            got = cache[b["slug"]]
+            rows.append({"name": b["name"], "country": got["country"],
+                         "url": got["url"]})
+            note = got.get("note")
+            print(f"  {i:2}/{len(e['bands'])} {b['name']:<28}"
+                  f" {got['country'] or '?':<16}"
+                  f" {got['url'] or ('FAILED: ' + note if note else '-')}")
+        path = os.path.join(args.fest_dir, f"killtown-{e['key']}.txt")
+        have = sum(1 for r in rows if r["url"])
+        print(f"  wrote {write_lineup(path, e, rows)}"
+              f"  ({have}/{len(rows)} with a Bandcamp link)\n")
 
 
 # ---------- bandcamp embed (opt-in) ----------
@@ -462,6 +657,36 @@ def load_list(path):
     return entries
 
 
+def fold(name):
+    """Strip a band name to letters and digits for comparison only.
+
+    Bands write themselves BØLZER and CHAOS ECHŒS on Bandcamp and Bolzer and
+    Chaos Echoes on a festival bill. Comparing raw strings flags those as
+    label-root accidents, which buries the two or three real ones.
+    """
+    decomposed = unicodedata.normalize("NFKD", name.lower())
+    # ø and œ have no decomposition, so spell out what NFKD cannot.
+    spelled = decomposed.translate(str.maketrans({"ø": "o", "œ": "oe",
+                                                  "æ": "ae", "ß": "ss",
+                                                  "đ": "d", "ð": "d",
+                                                  "þ": "th", "ł": "l"}))
+    return re.sub(r"[^a-z0-9]", "",
+                  "".join(c for c in spelled if not unicodedata.combining(c)))
+
+
+def same_artist(want, got):
+    """Is the resolved release plausibly the band we asked for?"""
+    a, b = fold(want), fold(got)
+    return bool(a) and bool(b) and (a in b or b in a)
+
+
+# One run's Bandcamp answers, keyed by the URL asked for. Bands recur across
+# editions (Rippikoulu has played four), so building the whole archive without
+# this asks Bandcamp the same question a dozen times. In memory only, dropped
+# when the process exits -- hard rule 1 is about disk, and stays intact.
+_resolved = {}
+
+
 def resolve_list(entries):
     """Resolve every entry, verifying the release really is that band's.
 
@@ -477,17 +702,25 @@ def resolve_list(entries):
             rec["note"] = "no bandcamp listed"
             print(f"  {i:2}/{len(entries)} {e['name']:<20} -")
         else:
-            try:
-                rel = resolve_release(e["url"])
-            except Exception as exc:
-                rel, rec["note"] = None, f"{type(exc).__name__}: {exc}"
+            if e["url"] in _resolved:
+                rel, rec["note"] = _resolved[e["url"]]
+            else:
+                try:
+                    rel, err = resolve_release(e["url"]), None
+                except Exception as exc:
+                    rel, err = None, f"{type(exc).__name__}: {exc}"
+                rec["note"] = err
+                # Cache failures too: the same dead URL appears in as many
+                # editions as the band played, and retrying it in each one
+                # spends the Bandcamp budget on a known answer.
+                _resolved[e["url"]] = (rel, err)
             if rel:
                 rec.update(embed=rel["embed"], release=rel["title"],
                            url=rel["url"] or e["url"], tracks=rel["tracks"],
                            playable=rel["playable"], minutes=rel["minutes"])
                 got = (rel["artist"] or "").strip()
                 want = e["name"].strip()
-                if want.lower() not in got.lower() and got.lower() not in want.lower():
+                if not same_artist(want, got):
                     rec["note"] = f"artist mismatch: page says {got!r}"
                 gated = rel["tracks"] - rel["playable"]
                 print(f"  {i:2}/{len(entries)} {e['name']:<20} {got} - {rel['title']}"
@@ -499,6 +732,167 @@ def resolve_list(entries):
                 print(f"  {i:2}/{len(entries)} {e['name']:<20} FAILED ({rec['note']})")
         out.append(rec)
     return out
+
+
+INDEX_PAGE = """<!doctype html><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<style>
+ :root{color-scheme:dark}
+ body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
+      padding:16px;max-width:760px;margin-inline:auto}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:18px}
+ ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
+ li{border-bottom:1px solid #222}
+ a.ed{display:flex;align-items:baseline;gap:10px;padding:11px 4px;
+      text-decoration:none;color:inherit}
+ a.ed:hover{background:#181818}
+ .nm{flex:1;min-width:0;font-weight:600}
+ .nm .yr{color:#c33;margin-right:7px}
+ .st{color:#777;font-size:12px;white-space:nowrap}
+ .hd{color:#4a4;font-size:12px;white-space:nowrap;min-width:62px;text-align:right}
+ .foot{color:#666;font-size:12px;margin-top:18px} a{color:#c33}
+</style>
+<h1>__TITLE__</h1>
+<div class=sub>__SUB__</div>
+<ol>__ROWS__</ol>
+<p class=foot>Lineups and Bandcamp links from
+ <a href="https://killtowndeathfest.com/">killtowndeathfest.com</a>.
+ Playback is Bandcamp's own embedded player; each page remembers what you have
+ heard, in this browser only.</p>
+<script>
+// Each edition page stores its heard-set under its own key, and this is the
+// same origin, so the index can report progress without any of them being open.
+for(const el of document.querySelectorAll('[data-key]')){
+ try{
+  const n = JSON.parse(localStorage.getItem(el.dataset.key) || '[]').length;
+  if(n) el.textContent = n + ' heard';
+ }catch(e){}
+}
+</script>"""
+
+
+def page_summary(path):
+    """Read a built page back: its title and the records baked into it.
+
+    The pages are the source of truth for these counts because they hold what
+    actually resolved, which a lineup file cannot know.
+    """
+    text = open(path, encoding="utf-8").read()
+    data = re.search(r"const BANDS = (\[.*?\]);\n", text, re.S)
+    title = re.search(r"<title>(.*?)</title>", text, re.S)
+    key = re.search(r"const KEY = '(.*?)'", text)
+    if not data or not title:
+        return None
+    records = json.loads(data.group(1))
+    playable = [r for r in records if r["embed"]]
+    return {
+        "file": os.path.basename(path),
+        "title": html.unescape(title.group(1)),
+        "key": key.group(1) if key else "",
+        "bands": len(records),
+        "playable": len(playable),
+        "minutes": sum(r["minutes"] or 0 for r in playable),
+    }
+
+
+def edition_order(name):
+    """Newest first, and a year's main edition above its Decay In May.
+
+    The suffix has to lose its extension before it is compared: '-decay-in-may'
+    sorts before '.html', which would stand the 2022 and 2023 pairs on their
+    heads.
+    """
+    m = re.search(r"(\d{4})(.*)", name.rsplit(".", 1)[0])
+    return (-int(m.group(1)), m.group(2)) if m else (0, name)
+
+
+def build_index(page_dir, out_path, title="Kill-Town Death Fest"):
+    """Write a landing page linking every built edition page in a directory."""
+    pages = []
+    for path in sorted(glob.glob(os.path.join(page_dir, "killtown-*.html"))):
+        if os.path.abspath(path) == os.path.abspath(out_path):
+            continue
+        got = page_summary(path)
+        if got:
+            pages.append(got)
+    pages.sort(key=lambda p: edition_order(p["file"]))
+
+    rows = []
+    for p in pages:
+        year = re.search(r"killtown-(\d{4})", p["file"]).group(1)
+        # The title already opens with the year for most editions; drop the
+        # duplicate so the coloured year column reads as a column.
+        # The year has its own column, so an edition the fest never named
+        # ('Kill-Town Death Fest 2013') ends up with an empty label rather
+        # than printing 2013 twice.
+        label = re.sub(r"^Kill-Town Death Fest\s*", "", p["title"])
+        label = re.sub(rf"^{year}\s*|\s*{year}$", "", label)
+        rows.append(
+            f'<li><a class=ed href="{html.escape(p["file"])}">'
+            f'<span class=nm><span class=yr>{year}</span>'
+            f'{html.escape(label)}</span>'
+            f'<span class=st>{p["bands"]} bands &middot; {p["playable"]}'
+            f' playable &middot; {p["minutes"] / 60:.1f} h</span>'
+            f'<span class=hd data-key="{html.escape(p["key"])}"></span>'
+            f'</a></li>')
+
+    bands = sum(p["bands"] for p in pages)
+    playable = sum(p["playable"] for p in pages)
+    hours = sum(p["minutes"] for p in pages) / 60
+    sub = (f"{len(pages)} editions &middot; {bands} slots &middot; "
+           f"{playable} playable &middot; {hours:.0f} hours")
+    page = (INDEX_PAGE.replace("__ROWS__", "\n".join(rows))
+            .replace("__TITLE__", html.escape(title))
+            .replace("__SUB__", sub))
+    with open(out_path, "w", encoding="utf-8") as fh:
+        fh.write(page)
+    return out_path
+
+
+def list_title(path, override=None):
+    """A lineup file's own header line is the page title, if it has one."""
+    if override:
+        return override
+    with open(path, encoding="utf-8") as fh:
+        first = fh.readline().strip()
+    if first.startswith("#"):
+        title = first.lstrip("# ").split(" - ")[0].strip()
+        if title:
+            return title
+    return os.path.basename(path).rsplit(".", 1)[0]
+
+
+def list_mode(args):
+    """--list: resolve one or more lineup files, optionally building pages."""
+    many = len(args.list) > 1
+    if many and args.build and not os.path.isdir(args.build):
+        sys.exit(f"--build must name a directory when building several "
+                 f"lineups; {args.build!r} is not one.")
+    if many and args.title:
+        print("  (--title ignored: each lineup takes its title from its own"
+              " header)\n")
+
+    for path in args.list:
+        entries = load_list(path)
+        title = list_title(path, None if many else args.title)
+        print(f"{title}\nresolving {len(entries)} bands "
+              f"(~{len(entries) * 2 * BC_INTERVAL:.0f}s at the Bandcamp rate "
+              f"limit, less for any already seen this run)\n")
+        records = resolve_list(entries)
+        ok = sum(1 for r in records if r["embed"])
+        bad = [r for r in records if r["note"] and r["embed"]]
+        print(f"\n  {ok}/{len(records)} playable"
+              + (f", {len(bad)} need checking" if bad else ""))
+        if args.build:
+            out = args.build
+            if many:
+                out = os.path.join(args.build, os.path.basename(path)
+                                   .rsplit(".", 1)[0] + ".html")
+            sub = (f"{ok} of {len(records)} bands playable - "
+                   "tap a band, tap next when the record ends")
+            print("  wrote " + build_page(records, out, title, sub))
+        print()
 
 
 def build_page(records, out_path, title, sub):
@@ -568,32 +962,39 @@ def main():
                     help="resolve a real Bandcamp embed (implies --serve, "
                          "costs 2 extra requests to Bandcamp per band)")
     ap.add_argument("--port", type=int, default=8800)
-    ap.add_argument("--list", metavar="FILE",
-                    help="lineup file of `Name | Country | Bandcamp URL` lines")
-    ap.add_argument("--build", metavar="OUT.html",
-                    help="with --list: write a standalone page and exit")
+    ap.add_argument("--list", nargs="+", metavar="FILE",
+                    help="lineup file(s) of `Name | Country | Bandcamp URL` "
+                         "lines; several share one Bandcamp lookup cache")
+    ap.add_argument("--build", metavar="OUT",
+                    help="with --list: write a standalone page and exit "
+                         "(a directory when several lineups are given)")
     ap.add_argument("--title", help="title for the built page")
+    ap.add_argument("--fest", nargs="*", metavar="EDITION",
+                    help="write killtown-<edition>.txt from the fest's own "
+                         "past-editions page; no argument lists the editions")
+    ap.add_argument("--fest-recent", type=int, metavar="N",
+                    help="with --fest: the N most recent past editions")
+    ap.add_argument("--fest-dir", default=".", metavar="DIR",
+                    help="where --fest writes lineup files (default: .)")
+    ap.add_argument("--index", nargs="?", const="index.html", metavar="OUT.html",
+                    help="write a landing page linking every built edition "
+                         "page in --index-dir (default: index.html); needs no "
+                         "network")
+    ap.add_argument("--index-dir", default=".", metavar="DIR",
+                    help="where --index looks for built pages (default: .)")
     args = ap.parse_args()
     args.serve = args.serve or args.embed
 
+    if args.index:
+        print("  wrote " + build_index(args.index_dir, args.index))
+        return
+
+    if args.fest is not None:
+        fest_mode(args)
+        return
+
     if args.list:
-        entries = load_list(args.list)
-        title = args.title or os.path.basename(args.list).rsplit(".", 1)[0]
-        with open(args.list, encoding="utf-8") as fh:
-            first = fh.readline().strip()
-        if not args.title and first.startswith("#"):
-            title = first.lstrip("# ").split(" - ")[0].strip() or title
-        print(f"resolving {len(entries)} bands "
-              f"(~{len(entries) * 2 * BC_INTERVAL:.0f}s at the Bandcamp rate limit)\n")
-        records = resolve_list(entries)
-        ok = sum(1 for r in records if r["embed"])
-        bad = [r for r in records if r["note"] and r["embed"]]
-        print(f"\n  {ok}/{len(records)} playable"
-              + (f", {len(bad)} need checking" if bad else ""))
-        if args.build:
-            sub = (f"{ok} of {len(records)} bands playable - "
-                   "tap a band, tap next when the record ends")
-            print("  wrote " + build_page(records, args.build, title, sub))
+        list_mode(args)
         return
 
     if args.serve:

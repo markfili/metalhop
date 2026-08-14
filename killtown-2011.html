@@ -1,0 +1,141 @@
+<!doctype html><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Kill-Town Death Fest 2011</title>
+<style>
+ :root{color-scheme:dark}
+ body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
+      padding:16px;max-width:760px;margin-inline:auto}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:14px}
+ #player{position:sticky;top:0;background:#111;padding:8px 0 12px;z-index:2}
+ #now{font-size:15px;margin-bottom:6px}
+ #now b{color:#fff} #now span{color:#888}
+ iframe{width:100%;max-width:400px;height:600px;border:0;display:block}
+ .gated{color:#a55;font-style:italic}
+ .none{color:#666;padding:24px 0}
+ .bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+ button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
+        padding:8px 14px;font:inherit;cursor:pointer}
+ button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
+ ol{list-style:none;padding:0;margin:0;border-top:1px solid #222}
+ li{display:flex;align-items:center;gap:10px;padding:9px 4px;
+    border-bottom:1px solid #222;cursor:pointer}
+ li:hover{background:#181818}
+ li.on{background:#1e1414;box-shadow:inset 3px 0 0 #c33}
+ li.heard .nm{color:#666;text-decoration:line-through}
+ .nm{flex:1;min-width:0} .nm b{font-weight:600}
+ .cy{color:#777;font-size:12px} .rel{color:#666;font-size:12px;display:block}
+ .dead .nm b{color:#665} .tick{color:#555;font-size:15px;width:18px;text-align:center}
+ a{color:#c33}
+</style>
+<h1>Kill-Town Death Fest 2011</h1>
+<div class=sub>12 of 18 bands playable - tap a band, tap next when the record ends</div>
+<div id=player><div id=now class=none>pick a band below</div></div>
+<div class=bar>
+ <button id=prev>&larr; prev band</button>
+ <button id=next>next band &rarr;</button>
+ <button id=stop>stop</button>
+ <button id=mark>mark heard</button>
+ <button id=unheard>next unheard</button>
+</div>
+<ol id=list></ol>
+<script>
+const BANDS = [{"name": "Antichrist", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Avulsed", "country": "Spain", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1789505896/size=large/tracklist=true/artwork=small/", "release": "Phoenix Cryptobiosis", "url": "https://avulsed.bandcamp.com/album/phoenix-cryptobiosis", "note": null, "tracks": 11, "playable": 11, "minutes": 44}, {"name": "Burial Invocation", "country": "Turkey", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=851840633/size=large/tracklist=true/artwork=small/", "release": "Abiogenesis", "url": "https://burialinvocation.bandcamp.com/album/abiogenesis", "note": null, "tracks": 5, "playable": 5, "minutes": 41}, {"name": "Cerekloth", "country": "Denmark", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Cruciamentum", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2814951388/size=large/tracklist=true/artwork=small/", "release": "Obsidian Refractions", "url": "https://cruciamentum.bandcamp.com/album/obsidian-refractions", "note": null, "tracks": 6, "playable": 6, "minutes": 41}, {"name": "Degial", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2872232922/size=large/tracklist=true/artwork=small/", "release": "Predator Reign", "url": "https://degial.bandcamp.com/album/predator-reign", "note": null, "tracks": 10, "playable": 10, "minutes": 39}, {"name": "Diskord", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2929954020/size=large/tracklist=true/artwork=small/", "release": "Bipolarities", "url": "https://diskord.bandcamp.com/album/bipolarities", "note": null, "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Embrace Of Thorns", "country": "Greece", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2108674233/size=large/tracklist=true/artwork=small/", "release": "Entropy Dynamics", "url": "https://embracethorns.bandcamp.com/album/entropy-dynamics", "note": null, "tracks": 11, "playable": 11, "minutes": 51}, {"name": "Ensnared", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Entrapment", "country": "Netherlands", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1682742535/size=large/tracklist=true/artwork=small/", "release": "Tribute to Paradise Lost, split with Grim Fate", "url": "https://entrapment2.bandcamp.com/album/tribute-to-paradise-lost-split-with-grim-fate", "note": null, "tracks": 1, "playable": 1, "minutes": 5}, {"name": "Funebrarum", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=756624427/size=large/tracklist=true/artwork=small/", "release": "Beckoning the Void of Eternal Silence", "url": "https://funebrarum-death-metal.bandcamp.com/album/beckoning-the-void-of-eternal-silence", "note": null, "tracks": 10, "playable": 10, "minutes": 49}, {"name": "Grave Miasma", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=580172242/size=large/tracklist=true/artwork=small/", "release": "Abyss of Wrathful Deities", "url": "https://gravemiasma.bandcamp.com/album/abyss-of-wrathful-deities", "note": null, "tracks": 9, "playable": 9, "minutes": 53}, {"name": "Necrovation", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Necrovorous", "country": "Greece", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=509529802/size=large/tracklist=true/artwork=small/", "release": "Plains of decay", "url": "https://necrovorous.bandcamp.com/album/plains-of-decay", "note": null, "tracks": 10, "playable": 10, "minutes": 43}, {"name": "Sonne Adam", "country": "Israel", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Undergang", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2771124459/size=large/tracklist=true/artwork=small/", "release": "Maddikehavets Dans", "url": "https://undergang.bandcamp.com/album/maddikehavets-dans", "note": null, "tracks": 1, "playable": 1, "minutes": 5}, {"name": "Vanhelgd", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2778702449/size=large/tracklist=true/artwork=small/", "release": "Temple Of Phobos", "url": "https://vanhelgd.bandcamp.com/album/temple-of-phobos", "note": null, "tracks": 7, "playable": 7, "minutes": 44}, {"name": "Winterwolf", "country": "Finland", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}];
+const KEY = 'metalhop:kill-town-death-fest-2011';
+let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let cur = -1;
+
+const listEl = document.getElementById('list');
+const nowEl  = document.getElementById('now');
+const player = document.getElementById('player');
+
+function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+
+// Bandcamp gates some tracks on some releases; the embed shows them greyed.
+// Say so up front so a half-streamable record isn't a surprise mid-listen.
+function meta(b){
+ if(!b.embed) return 'no Bandcamp listed';
+ const bits = [b.release || ''];
+ if(b.tracks) bits.push(`${b.tracks} tracks`, `${b.minutes} min`);
+ const gated = (b.tracks || 0) - (b.playable || 0);
+ let s = bits.filter(Boolean).join(' \u00b7 ');
+ if(gated > 0) s += ` \u00b7 <span class=gated>${gated} not streamable</span>`;
+ return s;
+}
+
+function render(){
+ listEl.innerHTML = '';
+ BANDS.forEach((b, i) => {
+  const li = document.createElement('li');
+  li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
+               + (b.embed ? '' : 'dead');
+  li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
+   + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
+   + `<span class=rel>${meta(b)}</span></span>`;
+  li.onclick = () => play(i);
+  listEl.appendChild(li);
+ });
+}
+
+function play(i){
+ const b = BANDS[i];
+ if(!b) return;
+ cur = i;
+ if(b.embed){
+  // Only rebuild the iframe when the band actually changes, so re-rendering
+  // the list never restarts playback.
+  nowEl.className = '';
+  nowEl.innerHTML = `<b>${b.name}</b> <span>&mdash; ${meta(b)}</span>`
+   + (b.url ? ` <a href="${b.url}" target=_blank rel=noopener>open &rarr;</a>` : '');
+  let f = document.getElementById('f');
+  if(!f || f.dataset.src !== b.embed){
+   if(f) f.remove();
+   f = document.createElement('iframe');
+   f.id = 'f'; f.dataset.src = b.embed; f.src = b.embed;
+   f.setAttribute('seamless','');
+   player.appendChild(f);
+  }
+ } else {
+  nowEl.className = 'none';
+  nowEl.textContent = b.name + ' \u2014 no Bandcamp listed, nothing to play';
+  const f = document.getElementById('f'); if(f) f.remove();
+ }
+ render();
+ listEl.children[i].scrollIntoView({block:'nearest'});
+}
+
+function step(d){
+ let i = cur;
+ for(let n = 0; n < BANDS.length; n++){
+  i = (i + d + BANDS.length) % BANDS.length;
+  if(BANDS[i].embed){ play(i); return; }
+ }
+}
+
+document.getElementById('next').onclick = () => step(1);
+document.getElementById('prev').onclick = () => step(-1);
+// Playback lives inside a cross-origin iframe we cannot command, so "stop"
+// means destroying the player. Pause and track-skip are Bandcamp's own
+// controls, inside the embed.
+document.getElementById('stop').onclick = () => {
+ const f = document.getElementById('f');
+ if(f) f.remove();
+ nowEl.className = 'none';
+ nowEl.textContent = cur >= 0 ? 'stopped \u2014 ' + BANDS[cur].name : 'stopped';
+};
+document.getElementById('mark').onclick = () => {
+ if(cur < 0) return;
+ const n = BANDS[cur].name;
+ heard.has(n) ? heard.delete(n) : heard.add(n);
+ save(); render();
+};
+document.getElementById('unheard').onclick = () => {
+ const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
+ if(i >= 0) play(i); else alert('all heard');
+};
+document.onkeydown = e => {
+ if(e.key === 'n') step(1);
+ if(e.key === 'p') step(-1);
+ if(e.key === 's') document.getElementById('stop').click();
+};
+render();
+</script>
