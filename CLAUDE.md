@@ -64,7 +64,11 @@ Everything lives in `metalhop.py`, deliberately. Six layers:
   blob. Opt-in, at most two fetches per band.
 - **Lineup pages** - `load_list` / `resolve_list` / `build_page` turn a lineup
   file into a standalone HTML page with the resolved album ids baked in, so the
-  page needs no runtime and no further scraping to keep working. `--list` takes
+  page needs no runtime and no further scraping to keep working. A page holds
+  two views, list and band, routed off `location.hash`, so a band has its own
+  URL and Android's Back button works. Leaving the band view hides it rather
+  than emptying it: a hidden iframe keeps playing, and moving an iframe in the
+  DOM would reload it and restart the record. `--list` takes
   several files at once and shares one in-memory `_resolved` cache across them,
   which matters because the archive repeats bands heavily: 340 slots across the
   14 editions are only ~230 distinct Bandcamp URLs.

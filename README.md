@@ -112,7 +112,15 @@ python3 -m http.server 8800 --bind 127.0.0.1   # then http://127.0.0.1:8800/
 - straight from `file://`
 - from GitHub Pages (see below)
 
-Playback is Bandcamp's own embedded player in an iframe. The page provides
+A page has two views. The lineup is a list; tapping a band opens that band on
+its own screen, at its own URL — `killtown-2019.html#tomb-mold` — so Android's
+Back button returns to the list and a band is a link you can send someone.
+
+Going back does **not** stop the record: the band view is hidden rather than
+torn down, so the iframe keeps playing while you browse, and a strip at the top
+of the list takes you back to it.
+
+Playback is Bandcamp's own embedded player in an iframe. The band view provides
 prev/next band and a stop button; play, pause and track selection are Bandcamp's
 controls inside the embed. There is no autoplay across bands — the embed is
 cross-origin, so nothing here can detect that a record finished.

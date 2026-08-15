@@ -5,57 +5,79 @@
  :root{color-scheme:dark}
  body{background:#111;color:#ddd;font:16px/1.5 system-ui,sans-serif;margin:0;
       padding:16px;max-width:760px;margin-inline:auto}
- h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:14px}
- #player{position:sticky;top:0;background:#111;padding:8px 0 12px;z-index:2}
- #now{font-size:15px;margin-bottom:6px}
- #now b{color:#fff} #now span{color:#888}
- iframe{width:100%;max-width:400px;height:600px;border:0;display:block}
- .gated{color:#a55;font-style:italic}
- .none{color:#666;padding:24px 0}
- .bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
- button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
-        padding:8px 14px;font:inherit;cursor:pointer}
- button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
+ h1{font-size:19px;margin:0 0 2px} .sub{color:#777;font-size:13px;margin-bottom:12px}
+ .hint{color:#666;font-size:13px;margin-bottom:12px}
  ol{list-style:none;padding:0;margin:0}
- /* Cards, not rows: a phone has no hover, so a band has to look tappable
-    before the finger arrives. The play glyph carries that on its own. */
- li{display:flex;align-items:center;gap:11px;padding:11px 13px;margin-bottom:8px;
-    background:#171717;border:1px solid #2c2c2c;border-radius:7px;cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
+ li{display:flex;align-items:stretch;margin-bottom:8px;background:#171717;
+    border:1px solid #2c2c2c;border-radius:7px;
     transition:background .12s,border-color .12s}
  li:hover{background:#1e1e1e;border-color:#444}
  li:active{background:#241717;border-color:#c33}
- li.on{background:#241717;border-color:#c33}
- li.on .play{color:#c33}
+ li.on{border-color:#c33}
+ li.dead{opacity:.5;background:#141414}
+ li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
+ .row{flex:1;min-width:0;display:flex;align-items:center;gap:11px;
+      padding:11px 0 11px 13px;text-decoration:none;color:inherit;
+      -webkit-tap-highlight-color:transparent}
  li.heard .nm b{color:#666;text-decoration:line-through}
  .nm{flex:1;min-width:0} .nm b{font-weight:600}
  .cy{color:#777;font-size:12px} .rel{color:#666;font-size:12px;display:block}
- /* Nothing to play is not a tappable thing; say so by looking inert. */
- li.dead{opacity:.5;background:#141414;cursor:default}
- li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
  .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
  .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
- /* Padded well past the glyph: this is a finger target sitting inside
-    another one, so it has to be easy to hit and easy to miss. */
- .like{flex:none;color:#4a4a4a;font-size:17px;line-height:1;padding:6px 2px 6px 8px;
-       cursor:pointer;-webkit-tap-highlight-color:transparent}
+ li.on .play{color:#c33}
+ /* A finger target inside another one: padded to be easy to hit and to miss. */
+ .like{flex:none;color:#4a4a4a;font-size:17px;line-height:1;display:flex;
+       align-items:center;padding:0 13px 0 9px;cursor:pointer;
+       -webkit-tap-highlight-color:transparent}
  .like:hover{color:#c33}
- .like:focus-visible{outline:2px solid #c33;outline-offset:2px;border-radius:3px}
+ .like:focus-visible{outline:2px solid #c33;outline-offset:-3px;border-radius:3px}
  li.liked .like{color:#c33}
+ /* Going back to the list does not stop the record: the band view is hidden
+    rather than torn down, so this strip is the way back to it. */
+ a.now{display:flex;align-items:center;gap:10px;padding:10px 13px;margin-bottom:12px;
+       background:#241717;border:1px solid #c33;border-radius:7px;
+       text-decoration:none;color:inherit;position:sticky;top:8px;z-index:2}
+ a.now .lbl{flex:1;min-width:0} a.now b{display:block}
+ a.now span{color:#aaa;font-size:12px}
+ a.back{display:inline-block;color:#c33;text-decoration:none;font-size:14px;
+        padding:4px 0;margin-bottom:10px}
+ h2{font-size:22px;margin:0} h2 .cy{font-size:13px;margin-left:8px}
+ #bsub{color:#777;font-size:13px;margin-bottom:12px}
+ #bsub .gated{color:#a55;font-style:italic}
+ iframe{width:100%;max-width:400px;height:600px;border:0;display:block}
+ .bar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+ button{background:#1c1c1c;color:#ddd;border:1px solid #333;border-radius:4px;
+        padding:8px 14px;font:inherit;cursor:pointer}
+ button:hover{background:#262626} button:disabled{opacity:.35;cursor:default}
+ .none{color:#666;padding:20px 0}
  a{color:#c33}
 </style>
-<h1>Kill-Town Death Fest 2022 “Ridden with Disease”</h1>
-<div class=sub>32 of 35 bands playable - tap a band, tap next when the record ends</div>
-<div id=player><div id=now class=none>Tap any band below to play it &darr;</div></div>
-<div class=bar>
- <button id=prev>&larr; prev band</button>
- <button id=next>next band &rarr;</button>
- <button id=stop>stop</button>
- <button id=mark>mark heard</button>
- <button id=unheard>next unheard</button>
- <button id=likebtn>&#9825; like</button>
-</div>
-<ol id=list></ol>
+
+<section id=listview>
+ <h1>Kill-Town Death Fest 2022 “Ridden with Disease”</h1>
+ <div class=sub>32 of 35 bands playable - tap a band, tap next when the record ends</div>
+ <a class=now id=nowstrip hidden><span>&#9654;</span>
+  <span class=lbl><b id=nowname></b><span id=nowrel></span></span>
+  <span>&rsaquo;</span></a>
+ <div class=hint>Tap any band to open it.</div>
+ <div class=bar><button id=unheard>next unheard</button></div>
+ <ol id=list></ol>
+</section>
+
+<section id=bandview hidden>
+ <a class=back href="#">&lsaquo; back to the lineup</a>
+ <h2><span id=bname></span><span class=cy id=bcountry></span></h2>
+ <div id=bsub></div>
+ <div id=player></div>
+ <div class=bar>
+  <button id=prev>&lsaquo; prev band</button>
+  <button id=next>next band &rsaquo;</button>
+  <button id=likebtn>&#9825; like</button>
+  <button id=mark>mark heard</button>
+  <button id=stop>stop</button>
+ </div>
+</section>
+
 <script>
 const BANDS = [{"name": "Acephalix", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4184416315/size=large/tracklist=true/artwork=small/", "release": "Theothanatology", "url": "https://acephalix.bandcamp.com/album/theothanatology-2", "note": null, "tracks": 8, "playable": 8, "minutes": 31}, {"name": "Ascendency", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=265542711/size=large/tracklist=true/artwork=small/", "release": "TETRALOGY OF DEATH Vol.2", "url": "https://prophesiedascendency.bandcamp.com/album/tetralogy-of-death-vol-2", "note": null, "tracks": 1, "playable": 1, "minutes": 6}, {"name": "Asphyx", "country": "Netherlands", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Astriferous", "country": "Costa Rica", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/track=3075460149/size=large/tracklist=true/artwork=small/", "release": "Dweller On The Threshold", "url": "https://astriferous.bandcamp.com/track/dweller-on-the-threshold", "note": null, "tracks": 1, "playable": 1, "minutes": 4}, {"name": "Bloodsoaked Necrovoid", "country": "Costa Rica", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=935761284/size=large/tracklist=true/artwork=small/", "release": "BLOODSOAKED NECROVOID", "url": "https://bloodsoakednecrovoid.bandcamp.com/album/bloodsoaked-necrovoid", "note": null, "tracks": 2, "playable": 2, "minutes": 14}, {"name": "Burial Invocation", "country": "Turkey", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=851840633/size=large/tracklist=true/artwork=small/", "release": "Abiogenesis", "url": "https://burialinvocation.bandcamp.com/album/abiogenesis", "note": null, "tracks": 5, "playable": 5, "minutes": 41}, {"name": "Carcinoid", "country": "Australia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3417230316/size=large/tracklist=true/artwork=small/", "release": "Encomium To Extinction", "url": "https://carcinoid.bandcamp.com/album/encomium-to-extinction", "note": null, "tracks": 5, "playable": 5, "minutes": 28}, {"name": "Cavurn", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3101803616/size=large/tracklist=true/artwork=small/", "release": "Undead in Bellingham", "url": "https://cavurn.bandcamp.com/album/undead-in-bellingham", "note": null, "tracks": 4, "playable": 4, "minutes": 34}, {"name": "Cerebral Rot", "country": "United States of America (the)", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Concrete Winds", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3741082001/size=large/tracklist=true/artwork=small/", "release": "Concrete Winds", "url": "https://concretewinds.bandcamp.com/album/concrete-winds", "note": null, "tracks": 9, "playable": 9, "minutes": 25}, {"name": "Cryptic Brood", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=857453195/size=large/tracklist=true/artwork=small/", "release": "Necrotic Flesh Bacteria", "url": "https://crypticbrood.bandcamp.com/album/necrotic-flesh-bacteria", "note": null, "tracks": 9, "playable": 9, "minutes": 39}, {"name": "Dead Congregation", "country": "Greece", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1891331168/size=large/tracklist=true/artwork=small/", "release": "Purifying Consecrated Ground (2022 remaster)", "url": "https://deadcongregation.bandcamp.com/album/purifying-consecrated-ground-2022-remaster", "note": null, "tracks": 5, "playable": 5, "minutes": 20}, {"name": "Deathcult", "country": "Switzerland", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Encoffination", "country": "United States of America (the)", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3809282567/size=large/tracklist=true/artwork=small/", "release": "Underneath the Great Abyss", "url": "https://encoffination.bandcamp.com/album/underneath-the-great-abyss", "note": null, "tracks": 2, "playable": 2, "minutes": 11}, {"name": "Engulfed", "country": "Turkey", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1032285331/size=large/tracklist=true/artwork=small/", "release": "Unearthly Litanies of Despair", "url": "https://engulfed.bandcamp.com/album/unearthly-litanies-of-despair", "note": null, "tracks": 8, "playable": 8, "minutes": 40}, {"name": "Faceless Burial", "country": "Australia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2420340131/size=large/tracklist=true/artwork=small/", "release": "At the Foothills of Deliration", "url": "https://facelessburial.bandcamp.com/album/at-the-foothills-of-deliration", "note": null, "tracks": 6, "playable": 6, "minutes": 37}, {"name": "Father Befouled", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=280934512/size=large/tracklist=true/artwork=small/", "release": "Immaculate Pain", "url": "https://fatherbefouled.bandcamp.com/album/immaculate-pain", "note": null, "tracks": 5, "playable": 5, "minutes": 25}, {"name": "Gorephilia", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1554721111/size=large/tracklist=true/artwork=small/", "release": "In the Eye of Nothing", "url": "https://gorephilia.bandcamp.com/album/in-the-eye-of-nothing", "note": null, "tracks": 9, "playable": 9, "minutes": 43}, {"name": "Harrowed", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3505887538/size=large/tracklist=true/artwork=small/", "release": "The Eternal Hunger", "url": "https://harroweddeathmetal.bandcamp.com/album/the-eternal-hunger", "note": null, "tracks": 8, "playable": 8, "minutes": 36}, {"name": "Hyperdontia", "country": "Turkey/Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=624696574/size=large/tracklist=true/artwork=small/", "release": "Dormant Scourge", "url": "https://hyperdontiaofficial.bandcamp.com/album/dormant-scourge", "note": null, "tracks": 2, "playable": 2, "minutes": 10}, {"name": "Innumerable Forms", "country": "United States of America (the)", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1476571592/size=large/tracklist=true/artwork=small/", "release": "Pain Effulgence", "url": "https://innumerableforms.bandcamp.com/album/pain-effulgence", "note": null, "tracks": 8, "playable": 8, "minutes": 35}, {"name": "Interment", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2375678576/size=large/tracklist=true/artwork=small/", "release": "Scent Of The Buried CD/LP", "url": "https://interment666.bandcamp.com/album/scent-of-the-buried-cd-lp-2", "note": null, "tracks": 10, "playable": 10, "minutes": 40}, {"name": "Kommand", "country": "United States of America (the)", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2893156155/size=large/tracklist=true/artwork=small/", "release": "TERRORSCAPE", "url": "https://kommand-maggotstomp.bandcamp.com/album/terrorscape", "note": null, "tracks": 6, "playable": 6, "minutes": 24}, {"name": "Krypts", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2813677146/size=large/tracklist=true/artwork=small/", "release": "Unending Degradation", "url": "https://krypts.bandcamp.com/album/unending-degradation", "note": null, "tracks": 8, "playable": 8, "minutes": 39}, {"name": "Morta Skuld", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1243919634/size=large/tracklist=true/artwork=small/", "release": "Surface", "url": "https://mortaskuld.bandcamp.com/album/surface", "note": null, "tracks": 11, "playable": 11, "minutes": 47}, {"name": "Mortal Wound", "country": "United States of America (the)", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1324197724/size=large/tracklist=true/artwork=small/", "release": "Split with Gutless", "url": "https://mortalwound.bandcamp.com/album/split-with-gutless", "note": null, "tracks": 3, "playable": 3, "minutes": 14}, {"name": "Mortiferum", "country": "United States of America (the)", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=83897782/size=large/tracklist=true/artwork=small/", "release": "Preserved In Torment", "url": "https://mortiferum.bandcamp.com/album/preserved-in-torment", "note": null, "tracks": 6, "playable": 6, "minutes": 40}, {"name": "Ossuary", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3986956227/size=large/tracklist=true/artwork=small/", "release": "Abhorrent Worship", "url": "https://ossuary-death.bandcamp.com/album/abhorrent-worship", "note": null, "tracks": 6, "playable": 6, "minutes": 37}, {"name": "Proscription", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/track=1779595453/size=large/tracklist=true/artwork=small/", "release": "The Great Deceiver", "url": "https://proscription.bandcamp.com/track/the-great-deceiver", "note": null, "tracks": 1, "playable": 1, "minutes": 6}, {"name": "Septage", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2535379740/size=large/tracklist=true/artwork=small/", "release": "Septic Worship (Intolerant Spree of Infesting Forms)", "url": "https://septage.bandcamp.com/album/septic-worship-intolerant-spree-of-infesting-forms", "note": null, "tracks": 15, "playable": 15, "minutes": 20}, {"name": "Sijjin", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2507745710/size=large/tracklist=true/artwork=small/", "release": "Helljjin Combat", "url": "https://sijjin.bandcamp.com/album/helljjin-combat", "note": null, "tracks": 8, "playable": 8, "minutes": 49}, {"name": "Sněť", "country": "Czechia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3187666240/size=large/tracklist=true/artwork=small/", "release": "Sněť / Sequestrum Split", "url": "https://snet.bandcamp.com/album/sn-sequestrum-split", "note": null, "tracks": 2, "playable": 2, "minutes": 7}, {"name": "Vanhelgd", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2778702449/size=large/tracklist=true/artwork=small/", "release": "Temple Of Phobos", "url": "https://vanhelgd.bandcamp.com/album/temple-of-phobos", "note": null, "tracks": 7, "playable": 7, "minutes": 44}, {"name": "Void Rot", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3190136716/size=large/tracklist=true/artwork=small/", "release": "Telluric Dismemberment", "url": "https://voidrot.bandcamp.com/album/telluric-dismemberment", "note": null, "tracks": 2, "playable": 2, "minutes": 10}, {"name": "Witch Vomit", "country": "United States of America (the)", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1311378905/size=large/tracklist=true/artwork=small/", "release": "A Scream From The Tomb Below", "url": "https://witchvomit1.bandcamp.com/album/a-scream-from-the-tomb-below-2", "note": null, "tracks": 8, "playable": 8, "minutes": 31}];
 const KEY = 'metalhop:kill-town-death-fest-2022-ridden-with-disease';
@@ -67,22 +89,20 @@ let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
 let liked = new Set(JSON.parse(localStorage.getItem(LIKED) || '[]'));
 let cur = -1;
 
-const listEl = document.getElementById('list');
-const nowEl  = document.getElementById('now');
-const player = document.getElementById('player');
+const listView = document.getElementById('listview');
+const bandView = document.getElementById('bandview');
+const listEl   = document.getElementById('list');
+const playerEl = document.getElementById('player');
+const strip    = document.getElementById('nowstrip');
 
 function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+function saveLiked(){ localStorage.setItem(LIKED, JSON.stringify([...liked])); }
 // No current band name carries a quote, but the fest books what it books and
 // one would silently break the attribute it lands in.
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
                                  .replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function saveLiked(){ localStorage.setItem(LIKED, JSON.stringify([...liked])); }
-
-function toggleLike(name){
- liked.has(name) ? liked.delete(name) : liked.add(name);
- saveLiked();
- render();   // safe mid-playback: render never touches the iframe
-}
+function slug(s){ return String(s).toLowerCase().normalize('NFKD')
+  .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
 
 // Bandcamp gates some tracks on some releases; the embed shows them greyed.
 // Say so up front so a half-streamable record isn't a surprise mid-listen.
@@ -91,42 +111,38 @@ function meta(b){
  const bits = [b.release || ''];
  if(b.tracks) bits.push(`${b.tracks} tracks`, `${b.minutes} min`);
  const gated = (b.tracks || 0) - (b.playable || 0);
- let s = bits.filter(Boolean).join(' \u00b7 ');
- if(gated > 0) s += ` \u00b7 <span class=gated>${gated} not streamable</span>`;
+ let s = bits.filter(Boolean).join(' · ');
+ if(gated > 0) s += ` · <span class=gated>${gated} not streamable</span>`;
  return s;
 }
 
-// The bar's like button reflects whichever band is selected, so it is redrawn
-// with the list rather than set once at startup.
-function syncLikeBtn(){
- const b = BANDS[cur];
- const on = b && liked.has(b.name);
- const btn = document.getElementById('likebtn');
- btn.innerHTML = on ? '&hearts; liked' : '&#9825; like';
- btn.style.color = on ? '#c33' : '';
- btn.disabled = cur < 0;
+function toggleLike(name){
+ liked.has(name) ? liked.delete(name) : liked.add(name);
+ saveLiked();
+ render();
+ syncBandView();
 }
 
 function render(){
- syncLikeBtn();
  listEl.innerHTML = '';
  BANDS.forEach((b, i) => {
   const li = document.createElement('li');
   li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
                + (liked.has(b.name) ? 'liked ' : '') + (b.embed ? '' : 'dead');
-  li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
-   + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
+  const inner = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
+   + `<span class=nm><b>${esc(b.name)}</b> <span class=cy>${esc(b.country)}</span>`
    + `<span class=rel>${meta(b)}</span></span>`
-   // A play glyph only where there is something to play; the embed is
-   // cross-origin, so this marks what is selected, never what is sounding.
-   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`
+   // A play glyph only where there is something to open.
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
+  // Bands with nothing to play get a span, not a link: no href, nothing to tap.
+  li.innerHTML = (b.embed
+    ? `<a class=row href="#${slug(b.name)}">${inner}</a>`
+    : `<span class=row>${inner}</span>`)
    + `<span class=like role=button tabindex=0 aria-pressed="${liked.has(b.name)}"`
    + ` aria-label="like ${esc(b.name)}">`
    + `${liked.has(b.name) ? '&hearts;' : '&#9825;'}</span>`;
-  li.onclick = () => play(i);
-  // The heart sits inside the row, so its click must not also start the band.
   const heart = li.querySelector('.like');
-  heart.onclick = e => { e.stopPropagation(); toggleLike(b.name); };
+  heart.onclick = e => { e.stopPropagation(); e.preventDefault(); toggleLike(b.name); };
   heart.onkeydown = e => {
    if(e.key === 'Enter' || e.key === ' '){
     e.preventDefault(); e.stopPropagation(); toggleLike(b.name);
@@ -134,40 +150,70 @@ function render(){
   };
   listEl.appendChild(li);
  });
+ const b = BANDS[cur];
+ const playing = b && document.getElementById('f');
+ strip.hidden = !playing;
+ if(playing){
+  strip.href = '#' + slug(b.name);
+  document.getElementById('nowname').textContent = b.name;
+  document.getElementById('nowrel').innerHTML = meta(b);
+ }
 }
 
-function play(i){
- const b = BANDS[i];
+function syncBandView(){
+ const b = BANDS[cur];
  if(!b) return;
+ document.getElementById('bname').textContent = b.name;
+ document.getElementById('bcountry').textContent = b.country;
+ document.getElementById('bsub').innerHTML = meta(b)
+  + (b.url ? ` &mdash; <a href="${esc(b.url)}" target=_blank rel=noopener>open on Bandcamp &rarr;</a>` : '');
+ const on = liked.has(b.name);
+ const like = document.getElementById('likebtn');
+ like.innerHTML = on ? '&hearts; liked' : '&#9825; like';
+ like.style.color = on ? '#c33' : '';
+ document.getElementById('mark').textContent =
+  heard.has(b.name) ? 'heard ✓' : 'mark heard';
+}
+
+function showBand(i){
  cur = i;
- if(b.embed){
-  // Only rebuild the iframe when the band actually changes, so re-rendering
-  // the list never restarts playback.
-  nowEl.className = '';
-  nowEl.innerHTML = `<b>${b.name}</b> <span>&mdash; ${meta(b)}</span>`
-   + (b.url ? ` <a href="${b.url}" target=_blank rel=noopener>open &rarr;</a>` : '');
-  let f = document.getElementById('f');
-  if(!f || f.dataset.src !== b.embed){
-   if(f) f.remove();
-   f = document.createElement('iframe');
-   f.id = 'f'; f.dataset.src = b.embed; f.src = b.embed;
-   f.setAttribute('seamless','');
-   player.appendChild(f);
-  }
- } else {
-  nowEl.className = 'none';
-  nowEl.textContent = b.name + ' \u2014 no Bandcamp listed, nothing to play';
-  const f = document.getElementById('f'); if(f) f.remove();
+ const b = BANDS[i];
+ listView.hidden = true;
+ bandView.hidden = false;
+ // Only rebuild the iframe when the band actually changes, so re-rendering
+ // never restarts playback.
+ let f = document.getElementById('f');
+ if(!f || f.dataset.src !== b.embed){
+  if(f) f.remove();
+  f = document.createElement('iframe');
+  f.id = 'f'; f.dataset.src = b.embed; f.src = b.embed;
+  f.setAttribute('seamless','');
+  playerEl.appendChild(f);
  }
+ syncBandView();
  render();
- listEl.children[i].scrollIntoView({block:'nearest'});
+ window.scrollTo(0, 0);
+}
+
+function showList(){
+ // The band view is hidden, not emptied: a hidden iframe keeps playing, so
+ // you can browse the lineup while a record runs.
+ bandView.hidden = true;
+ listView.hidden = false;
+ render();
+}
+
+function route(){
+ const want = decodeURIComponent(location.hash.slice(1));
+ const i = BANDS.findIndex(b => b.embed && slug(b.name) === want);
+ if(i >= 0) showBand(i); else showList();
 }
 
 function step(d){
  let i = cur;
  for(let n = 0; n < BANDS.length; n++){
   i = (i + d + BANDS.length) % BANDS.length;
-  if(BANDS[i].embed){ play(i); return; }
+  if(BANDS[i].embed){ location.hash = '#' + slug(BANDS[i].name); return; }
  }
 }
 
@@ -179,29 +225,28 @@ document.getElementById('prev').onclick = () => step(-1);
 document.getElementById('stop').onclick = () => {
  const f = document.getElementById('f');
  if(f) f.remove();
- nowEl.className = 'none';
- nowEl.textContent = cur >= 0 ? 'stopped \u2014 ' + BANDS[cur].name : 'stopped';
+ render();
 };
 document.getElementById('mark').onclick = () => {
  if(cur < 0) return;
  const n = BANDS[cur].name;
  heard.has(n) ? heard.delete(n) : heard.add(n);
- save(); render();
-};
-document.getElementById('unheard').onclick = () => {
- const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
- if(i >= 0) play(i); else alert('all heard');
+ save(); render(); syncBandView();
 };
 document.getElementById('likebtn').onclick = () => {
  if(cur >= 0) toggleLike(BANDS[cur].name);
+};
+document.getElementById('unheard').onclick = () => {
+ const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
+ if(i >= 0) location.hash = '#' + slug(BANDS[i].name); else alert('all heard');
 };
 document.onkeydown = e => {
  if(e.target.tagName === 'BUTTON' || e.target.className === 'like') return;
  if(e.key === 'n') step(1);
  if(e.key === 'p') step(-1);
- if(e.key === 's') document.getElementById('stop').click();
  if(e.key === 'l' && cur >= 0) toggleLike(BANDS[cur].name);
+ if(e.key === 'Escape' && !bandView.hidden) history.back();
 };
-
-render();
+window.addEventListener('hashchange', route);
+route();
 </script>
