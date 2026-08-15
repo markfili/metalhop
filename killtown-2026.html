@@ -35,6 +35,13 @@
  li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
  .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
  .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
+ /* Padded well past the glyph: this is a finger target sitting inside
+    another one, so it has to be easy to hit and easy to miss. */
+ .like{flex:none;color:#4a4a4a;font-size:17px;line-height:1;padding:6px 2px 6px 8px;
+       cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .like:hover{color:#c33}
+ .like:focus-visible{outline:2px solid #c33;outline-offset:2px;border-radius:3px}
+ li.liked .like{color:#c33}
  a{color:#c33}
 </style>
 <h1>Kill-Town Death Fest XI &quot;Stages of Decay&quot;</h1>
@@ -46,12 +53,18 @@
  <button id=stop>stop</button>
  <button id=mark>mark heard</button>
  <button id=unheard>next unheard</button>
+ <button id=likebtn>&#9825; like</button>
 </div>
 <ol id=list></ol>
 <script>
 const BANDS = [{"name": "Abhorrence", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3858116782/size=large/tracklist=true/artwork=small/", "release": "Completely Vulgar", "url": "https://abhorrencefin.bandcamp.com/album/completely-vulgar", "note": null, "tracks": 22, "playable": 22, "minutes": 81}, {"name": "Atomic Aggressor", "country": "Chile", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4144743692/size=large/tracklist=true/artwork=small/", "release": "Sights of Suffering", "url": "https://atomicaggressor.bandcamp.com/album/sights-of-suffering", "note": null, "tracks": 10, "playable": 10, "minutes": 47}, {"name": "Cenotaph", "country": "Mexico", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1112128269/size=large/tracklist=true/artwork=small/", "release": "Saga Bélica", "url": "https://cenotaphmx.bandcamp.com/album/saga-b-lica", "note": null, "tracks": 8, "playable": 8, "minutes": 38}, {"name": "Civerous", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3729428206/size=large/tracklist=true/artwork=small/", "release": "CIVEROUS - DECREPIT FLESH RELIC", "url": "https://transylvanianrecordings.bandcamp.com/album/civerous-decrepit-flesh-relic", "note": null, "tracks": 7, "playable": 7, "minutes": 45}, {"name": "Cryptworm", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2147445147/size=large/tracklist=true/artwork=small/", "release": "Infectious Pathological Waste", "url": "https://cryptworm.bandcamp.com/album/infectious-pathological-waste", "note": null, "tracks": 8, "playable": 8, "minutes": 35}, {"name": "Dead Void", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1412347064/size=large/tracklist=true/artwork=small/", "release": "Cranial Devastation", "url": "https://deadvoid.bandcamp.com/album/cranial-devastation", "note": null, "tracks": 5, "playable": 5, "minutes": 35}, {"name": "Death Pulsation", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2680926515/size=large/tracklist=true/artwork=small/", "release": "DEMO 2025", "url": "https://deathpulsation.bandcamp.com/album/demo-2025", "note": null, "tracks": 3, "playable": 3, "minutes": 12}, {"name": "Degraved", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2285347009/size=large/tracklist=true/artwork=small/", "release": "Spectral Realm of Ruin", "url": "https://degraved.bandcamp.com/album/spectral-realm-of-ruin", "note": null, "tracks": 7, "playable": 7, "minutes": 36}, {"name": "Disembodiment", "country": "Canada", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4125003927/size=large/tracklist=true/artwork=small/", "release": "Mutated Chaos", "url": "https://disembodimentdeath.bandcamp.com/album/mutated-chaos", "note": null, "tracks": 6, "playable": 6, "minutes": 14}, {"name": "Ectovoid", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=289493501/size=large/tracklist=true/artwork=small/", "release": "In Unreality's Coffin", "url": "https://ectovoid.bandcamp.com/album/in-unrealitys-coffin", "note": null, "tracks": 9, "playable": 9, "minutes": 45}, {"name": "Father Befouled", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=280934512/size=large/tracklist=true/artwork=small/", "release": "Immaculate Pain", "url": "https://fatherbefouled.bandcamp.com/album/immaculate-pain", "note": null, "tracks": 5, "playable": 5, "minutes": 25}, {"name": "Filth", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3533880174/size=large/tracklist=true/artwork=small/", "release": "Death Exhibiton", "url": "https://mesacounojo.bandcamp.com/album/death-exhibiton", "note": null, "tracks": 10, "playable": 1, "minutes": 4}, {"name": "Fossilization", "country": "Brazil", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1902676375/size=large/tracklist=true/artwork=small/", "release": "Advent Of Wounds", "url": "https://everlastingspew.bandcamp.com/album/advent-of-wounds", "note": null, "tracks": 7, "playable": 7, "minutes": 36}, {"name": "Funebrarum", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=756624427/size=large/tracklist=true/artwork=small/", "release": "Beckoning the Void of Eternal Silence", "url": "https://funebrarum-death-metal.bandcamp.com/album/beckoning-the-void-of-eternal-silence", "note": null, "tracks": 10, "playable": 10, "minutes": 49}, {"name": "Larvae", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2362690880/size=large/tracklist=true/artwork=small/", "release": "Arousal Of The Crawling Creature", "url": "https://larvae-gore.bandcamp.com/album/arousal-of-the-crawling-creature", "note": null, "tracks": 6, "playable": 6, "minutes": 13}, {"name": "Massacre", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3882687212/size=large/tracklist=true/artwork=small/", "release": "NECROLUTION", "url": "https://massacre3.bandcamp.com/album/necrolution", "note": null, "tracks": 16, "playable": 16, "minutes": 47}, {"name": "Morbific", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3522612271/size=large/tracklist=true/artwork=small/", "release": "Bloom of the Abnormal Flesh", "url": "https://morbific.bandcamp.com/album/bloom-of-the-abnormal-flesh", "note": null, "tracks": 11, "playable": 11, "minutes": 44}, {"name": "Murder Squad", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Mutation", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3690188487/size=large/tracklist=true/artwork=small/", "release": "Demo '23", "url": "https://mutationswe.bandcamp.com/album/demo-23", "note": null, "tracks": 3, "playable": 3, "minutes": 11}, {"name": "Nekus", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2434510565/size=large/tracklist=true/artwork=small/", "release": "Sepulchral Divination", "url": "https://sentientruin.bandcamp.com/album/sepulchral-divination", "note": null, "tracks": 6, "playable": 6, "minutes": 52}, {"name": "Of Feather And Bone", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3838040456/size=large/tracklist=true/artwork=small/", "release": "Sulfuric Disintegration", "url": "https://offeatherandbone666.bandcamp.com/album/sulfuric-disintegration", "note": null, "tracks": 6, "playable": 6, "minutes": 30}, {"name": "Perishing", "country": "Costa Rica", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1113189524/size=large/tracklist=true/artwork=small/", "release": "Malicious Acropolis Unveiled", "url": "https://perishing.bandcamp.com/album/malicious-acropolis-unveiled", "note": null, "tracks": 6, "playable": 6, "minutes": 45}, {"name": "Phenocryst", "country": "Portugal", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=790746637/size=large/tracklist=true/artwork=small/", "release": "Cremation Pyre", "url": "https://phenocryst.bandcamp.com/album/cremation-pyre", "note": null, "tracks": 8, "playable": 8, "minutes": 39}, {"name": "Phobocosm", "country": "Canada", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3697636593/size=large/tracklist=true/artwork=small/", "release": "Gateway", "url": "https://darkdescentrecords.bandcamp.com/album/gateway", "note": null, "tracks": 7, "playable": 7, "minutes": 35}, {"name": "Proscription", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=217848591/size=large/tracklist=true/artwork=small/", "release": "Conduit", "url": "https://darkdescentrecords.bandcamp.com/album/conduit", "note": null, "tracks": 9, "playable": 9, "minutes": 43}, {"name": "Purtenance", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=326424656/size=large/tracklist=true/artwork=small/", "release": "Buried Incarnation", "url": "https://xtreemmusic.bandcamp.com/album/buried-incarnation", "note": null, "tracks": 9, "playable": 9, "minutes": 39}, {"name": "Putridarium", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=738252771/size=large/tracklist=true/artwork=small/", "release": "Necrología del Sadismo: Excerpts from a Deranged Mind", "url": "https://putridariummetalofdeath.bandcamp.com/album/necrolog-a-del-sadismo-excerpts-from-a-deranged-mind", "note": null, "tracks": 10, "playable": 10, "minutes": 41}, {"name": "Rothadás", "country": "Hungary", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1523277354/size=large/tracklist=true/artwork=small/", "release": "Töviskert... a kísértés örök érzete... lidércharang", "url": "https://rothadasdeathdoom.bandcamp.com/album/t-viskert-a-k-s-rt-s-r-k-rzete-lid-rcharang", "note": null, "tracks": 6, "playable": 6, "minutes": 45}, {"name": "Rottrevore", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3444429092/size=large/tracklist=true/artwork=small/", "release": "Iniquitous", "url": "https://xtreemmusic.bandcamp.com/album/iniquitous", "note": null, "tracks": 14, "playable": 11, "minutes": 46}, {"name": "Savage", "country": "Netherlands", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=594238231/size=large/tracklist=true/artwork=small/", "release": "Septic Tomb ep (Out Now)!!", "url": "https://savagedeathmetal.bandcamp.com/album/septic-tomb-ep-out-now", "note": null, "tracks": 7, "playable": 7, "minutes": 24}, {"name": "Seraphic Entombment", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2682414846/size=large/tracklist=true/artwork=small/", "release": "Sickness Particles Gleam", "url": "https://seraphicentombment.bandcamp.com/album/sickness-particles-gleam", "note": null, "tracks": 5, "playable": 5, "minutes": 54}, {"name": "Shrieking Demons", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1444244592/size=large/tracklist=true/artwork=small/", "release": "The Festering Dwellers", "url": "https://shriekingdemons.bandcamp.com/album/the-festering-dwellers", "note": null, "tracks": 10, "playable": 10, "minutes": 39}, {"name": "Skepticism", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4234969551/size=large/tracklist=true/artwork=small/", "release": "Companion", "url": "https://skepticism.bandcamp.com/album/companion", "note": null, "tracks": 6, "playable": 6, "minutes": 48}, {"name": "Sněť", "country": "Czechia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2014461237/size=large/tracklist=true/artwork=small/", "release": "Mokvání v okovech", "url": "https://snet.bandcamp.com/album/mokv-n-v-okovech", "note": null, "tracks": 8, "playable": 8, "minutes": 28}, {"name": "Tyranny", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2155364920/size=large/tracklist=true/artwork=small/", "release": "Aeons In Tectonic Interment", "url": "https://tyrannyfuneraldoom.bandcamp.com/album/aeons-in-tectonic-interment", "note": null, "tracks": 5, "playable": 5, "minutes": 51}, {"name": "Warp Chamber", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1012215847/size=large/tracklist=true/artwork=small/", "release": "Implements Of Excruciation", "url": "https://warpchamber.bandcamp.com/album/implements-of-excruciation", "note": null, "tracks": 4, "playable": 4, "minutes": 30}];
 const KEY = 'metalhop:kill-town-death-fest-xi-stages-of-decay';
+// Heard is per edition -- you sat through this bill. Liking a band is about
+// the band, so it is one shared key across every page here: like Dead Void in
+// 2019 and they show liked in 2021 and 2026 too.
+const LIKED = 'metalhop:liked';
 let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let liked = new Set(JSON.parse(localStorage.getItem(LIKED) || '[]'));
 let cur = -1;
 
 const listEl = document.getElementById('list');
@@ -59,6 +72,17 @@ const nowEl  = document.getElementById('now');
 const player = document.getElementById('player');
 
 function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+// No current band name carries a quote, but the fest books what it books and
+// one would silently break the attribute it lands in.
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+                                 .replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function saveLiked(){ localStorage.setItem(LIKED, JSON.stringify([...liked])); }
+
+function toggleLike(name){
+ liked.has(name) ? liked.delete(name) : liked.add(name);
+ saveLiked();
+ render();   // safe mid-playback: render never touches the iframe
+}
 
 // Bandcamp gates some tracks on some releases; the embed shows them greyed.
 // Say so up front so a half-streamable record isn't a surprise mid-listen.
@@ -72,19 +96,42 @@ function meta(b){
  return s;
 }
 
+// The bar's like button reflects whichever band is selected, so it is redrawn
+// with the list rather than set once at startup.
+function syncLikeBtn(){
+ const b = BANDS[cur];
+ const on = b && liked.has(b.name);
+ const btn = document.getElementById('likebtn');
+ btn.innerHTML = on ? '&hearts; liked' : '&#9825; like';
+ btn.style.color = on ? '#c33' : '';
+ btn.disabled = cur < 0;
+}
+
 function render(){
+ syncLikeBtn();
  listEl.innerHTML = '';
  BANDS.forEach((b, i) => {
   const li = document.createElement('li');
   li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
-               + (b.embed ? '' : 'dead');
+               + (liked.has(b.name) ? 'liked ' : '') + (b.embed ? '' : 'dead');
   li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
    + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
    + `<span class=rel>${meta(b)}</span></span>`
    // A play glyph only where there is something to play; the embed is
    // cross-origin, so this marks what is selected, never what is sounding.
-   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`
+   + `<span class=like role=button tabindex=0 aria-pressed="${liked.has(b.name)}"`
+   + ` aria-label="like ${esc(b.name)}">`
+   + `${liked.has(b.name) ? '&hearts;' : '&#9825;'}</span>`;
   li.onclick = () => play(i);
+  // The heart sits inside the row, so its click must not also start the band.
+  const heart = li.querySelector('.like');
+  heart.onclick = e => { e.stopPropagation(); toggleLike(b.name); };
+  heart.onkeydown = e => {
+   if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault(); e.stopPropagation(); toggleLike(b.name);
+   }
+  };
   listEl.appendChild(li);
  });
 }
@@ -145,10 +192,16 @@ document.getElementById('unheard').onclick = () => {
  const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
  if(i >= 0) play(i); else alert('all heard');
 };
+document.getElementById('likebtn').onclick = () => {
+ if(cur >= 0) toggleLike(BANDS[cur].name);
+};
 document.onkeydown = e => {
+ if(e.target.tagName === 'BUTTON' || e.target.className === 'like') return;
  if(e.key === 'n') step(1);
  if(e.key === 'p') step(-1);
  if(e.key === 's') document.getElementById('stop').click();
+ if(e.key === 'l' && cur >= 0) toggleLike(BANDS[cur].name);
 };
+
 render();
 </script>

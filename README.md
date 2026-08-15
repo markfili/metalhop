@@ -117,7 +117,11 @@ prev/next band and a stop button; play, pause and track selection are Bandcamp's
 controls inside the embed. There is no autoplay across bands — the embed is
 cross-origin, so nothing here can detect that a record finished.
 
-Bands you've heard are remembered in `localStorage`, per page.
+Bands you've heard are remembered in `localStorage`, per page. **Liking** a band
+— the heart on its row, the `♥ like` button, or the `l` key — is remembered
+under one shared key instead, so a band you like in 2019 shows liked on every
+edition they played. Both live in your browser only; there is no account and
+nothing leaves the page.
 
 ## GitHub Pages
 

@@ -35,6 +35,13 @@
  li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
  .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
  .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
+ /* Padded well past the glyph: this is a finger target sitting inside
+    another one, so it has to be easy to hit and easy to miss. */
+ .like{flex:none;color:#4a4a4a;font-size:17px;line-height:1;padding:6px 2px 6px 8px;
+       cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .like:hover{color:#c33}
+ .like:focus-visible{outline:2px solid #c33;outline-offset:2px;border-radius:3px}
+ li.liked .like{color:#c33}
  a{color:#c33}
 </style>
 <h1>Kill-Town Death Fest 2013</h1>
@@ -46,12 +53,18 @@
  <button id=stop>stop</button>
  <button id=mark>mark heard</button>
  <button id=unheard>next unheard</button>
+ <button id=likebtn>&#9825; like</button>
 </div>
 <ol id=list></ol>
 <script>
 const BANDS = [{"name": "Alchemyst", "country": "Germany", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Anhedonist", "country": "United States", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Apothecary", "country": "Denmark", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Blaspherian", "country": "United States", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Cadaveric Fumes", "country": "France", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1708231172/size=large/tracklist=true/artwork=small/", "release": "Echoing Chambers of Soul", "url": "https://cadavericfumes.bandcamp.com/album/echoing-chambers-of-soul", "note": null, "tracks": 7, "playable": 7, "minutes": 33}, {"name": "Convulse", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3291602828/size=large/tracklist=true/artwork=small/", "release": "Cycle of Revenge", "url": "https://convulsefinland.bandcamp.com/album/cycle-of-revenge", "note": null, "tracks": 8, "playable": 8, "minutes": 34}, {"name": "Death Strike", "country": "United States", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Drowned", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1401030913/size=large/tracklist=true/artwork=small/", "release": "Procul His", "url": "https://drowned.bandcamp.com/album/procul-his", "note": null, "tracks": 8, "playable": 8, "minutes": 44}, {"name": "Engulfed", "country": "Turkey", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1032285331/size=large/tracklist=true/artwork=small/", "release": "Unearthly Litanies of Despair", "url": "https://engulfed.bandcamp.com/album/unearthly-litanies-of-despair", "note": null, "tracks": 8, "playable": 8, "minutes": 40}, {"name": "Entrails", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1669106708/size=large/tracklist=true/artwork=small/", "release": "Rise of the Reaper", "url": "https://entrails666.bandcamp.com/album/rise-of-the-reaper", "note": null, "tracks": 13, "playable": 13, "minutes": 47}, {"name": "Essenz", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=840979417/size=large/tracklist=true/artwork=small/", "release": "Manes Impetus", "url": "https://essenz.bandcamp.com/album/manes-impetus", "note": null, "tracks": 7, "playable": 7, "minutes": 57}, {"name": "Exhumed", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=266755848/size=large/tracklist=true/artwork=small/", "release": "Red Asphalt", "url": "https://exhumed.bandcamp.com/album/red-asphalt", "note": null, "tracks": 10, "playable": 10, "minutes": 37}, {"name": "Funeralium", "country": "France", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1633849921/size=large/tracklist=true/artwork=small/", "release": "Decrepit", "url": "https://funeralium.bandcamp.com/album/decrepit-2", "note": null, "tracks": 4, "playable": 4, "minutes": 78}, {"name": "Indesinence", "country": "United Kingdom", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Into Darkness", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2522965408/size=large/tracklist=true/artwork=small/", "release": "\"Route to the Outer Side\" full-length (2026)", "url": "https://intodarkness.bandcamp.com/album/route-to-the-outer-side-full-length-2026", "note": null, "tracks": 8, "playable": 8, "minutes": 41}, {"name": "Katechon", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=378662750/size=large/tracklist=true/artwork=small/", "release": "Sanger Fra Auschwitz", "url": "https://katechon.bandcamp.com/album/sanger-fra-auschwitz", "note": null, "tracks": 8, "playable": 8, "minutes": 38}, {"name": "Lantern", "country": "Finland", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Obscure Infinity", "country": "Germany", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Ogdru Jahad", "country": "Denmark", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Ophis", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4023317272/size=large/tracklist=true/artwork=small/", "release": "Spew Forth Odium", "url": "https://ophis.bandcamp.com/album/spew-forth-odium", "note": null, "tracks": 6, "playable": 6, "minutes": 64}, {"name": "Pentacle", "country": "Netherlands", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Reverie", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/track=1191978742/size=large/tracklist=true/artwork=small/", "release": "First Reverie", "url": "https://eirever.bandcamp.com/track/first-reverie", "note": null, "tracks": 1, "playable": 1, "minutes": 3}, {"name": "Rottrevore", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3444429092/size=large/tracklist=true/artwork=small/", "release": "Iniquitous", "url": "https://xtreemmusic.bandcamp.com/album/iniquitous", "note": null, "tracks": 14, "playable": 11, "minutes": 46}, {"name": "Tribulation", "country": "Sweden", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}];
 const KEY = 'metalhop:kill-town-death-fest-2013';
+// Heard is per edition -- you sat through this bill. Liking a band is about
+// the band, so it is one shared key across every page here: like Dead Void in
+// 2019 and they show liked in 2021 and 2026 too.
+const LIKED = 'metalhop:liked';
 let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let liked = new Set(JSON.parse(localStorage.getItem(LIKED) || '[]'));
 let cur = -1;
 
 const listEl = document.getElementById('list');
@@ -59,6 +72,17 @@ const nowEl  = document.getElementById('now');
 const player = document.getElementById('player');
 
 function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+// No current band name carries a quote, but the fest books what it books and
+// one would silently break the attribute it lands in.
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+                                 .replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function saveLiked(){ localStorage.setItem(LIKED, JSON.stringify([...liked])); }
+
+function toggleLike(name){
+ liked.has(name) ? liked.delete(name) : liked.add(name);
+ saveLiked();
+ render();   // safe mid-playback: render never touches the iframe
+}
 
 // Bandcamp gates some tracks on some releases; the embed shows them greyed.
 // Say so up front so a half-streamable record isn't a surprise mid-listen.
@@ -72,19 +96,42 @@ function meta(b){
  return s;
 }
 
+// The bar's like button reflects whichever band is selected, so it is redrawn
+// with the list rather than set once at startup.
+function syncLikeBtn(){
+ const b = BANDS[cur];
+ const on = b && liked.has(b.name);
+ const btn = document.getElementById('likebtn');
+ btn.innerHTML = on ? '&hearts; liked' : '&#9825; like';
+ btn.style.color = on ? '#c33' : '';
+ btn.disabled = cur < 0;
+}
+
 function render(){
+ syncLikeBtn();
  listEl.innerHTML = '';
  BANDS.forEach((b, i) => {
   const li = document.createElement('li');
   li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
-               + (b.embed ? '' : 'dead');
+               + (liked.has(b.name) ? 'liked ' : '') + (b.embed ? '' : 'dead');
   li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
    + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
    + `<span class=rel>${meta(b)}</span></span>`
    // A play glyph only where there is something to play; the embed is
    // cross-origin, so this marks what is selected, never what is sounding.
-   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`
+   + `<span class=like role=button tabindex=0 aria-pressed="${liked.has(b.name)}"`
+   + ` aria-label="like ${esc(b.name)}">`
+   + `${liked.has(b.name) ? '&hearts;' : '&#9825;'}</span>`;
   li.onclick = () => play(i);
+  // The heart sits inside the row, so its click must not also start the band.
+  const heart = li.querySelector('.like');
+  heart.onclick = e => { e.stopPropagation(); toggleLike(b.name); };
+  heart.onkeydown = e => {
+   if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault(); e.stopPropagation(); toggleLike(b.name);
+   }
+  };
   listEl.appendChild(li);
  });
 }
@@ -145,10 +192,16 @@ document.getElementById('unheard').onclick = () => {
  const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
  if(i >= 0) play(i); else alert('all heard');
 };
+document.getElementById('likebtn').onclick = () => {
+ if(cur >= 0) toggleLike(BANDS[cur].name);
+};
 document.onkeydown = e => {
+ if(e.target.tagName === 'BUTTON' || e.target.className === 'like') return;
  if(e.key === 'n') step(1);
  if(e.key === 'p') step(-1);
  if(e.key === 's') document.getElementById('stop').click();
+ if(e.key === 'l' && cur >= 0) toggleLike(BANDS[cur].name);
 };
+
 render();
 </script>

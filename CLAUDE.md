@@ -86,6 +86,13 @@ Everything lives in `metalhop.py`, deliberately. Six layers:
 Navigation is a `stack` of band dicts in `main()`. `b` pops, `s` clears, dead
 ends pop automatically. State lives in memory only.
 
+The two things a built page remembers are keyed differently on purpose. Heard
+is per edition, under the page's own `metalhop:<title>` key, because it means
+"I sat through this bill". Liked is one shared `metalhop:liked` key across
+every page, because it means something about the band rather than the year -
+64 bands played more than one edition (Anatomia five), and liking one of them
+in 2019 should show in 2026. Both are `localStorage`, so they never leave the browser.
+
 ## Endpoints used
 
 All undocumented AJAX endpoints that the MA site itself calls. Expect them to

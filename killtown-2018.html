@@ -35,6 +35,13 @@
  li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
  .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
  .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
+ /* Padded well past the glyph: this is a finger target sitting inside
+    another one, so it has to be easy to hit and easy to miss. */
+ .like{flex:none;color:#4a4a4a;font-size:17px;line-height:1;padding:6px 2px 6px 8px;
+       cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .like:hover{color:#c33}
+ .like:focus-visible{outline:2px solid #c33;outline-offset:2px;border-radius:3px}
+ li.liked .like{color:#c33}
  a{color:#c33}
 </style>
 <h1>Kill-Town Death Fest 2018 “The Resurrection”</h1>
@@ -46,12 +53,18 @@
  <button id=stop>stop</button>
  <button id=mark>mark heard</button>
  <button id=unheard>next unheard</button>
+ <button id=likebtn>&#9825; like</button>
 </div>
 <ol id=list></ol>
 <script>
 const BANDS = [{"name": "Blood Incantation", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3577977696/size=large/tracklist=true/artwork=small/", "release": "All Gates Open (Original Motion Picture Soundtrack) [24-bit HD audio]", "url": "https://bloodincantation.bandcamp.com/album/all-gates-open-original-motion-picture-soundtrack-24-bit-hd-audio", "note": null, "tracks": 4, "playable": 4, "minutes": 61}, {"name": "Cemetery Urn", "country": "Australia", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=83265003/size=large/tracklist=true/artwork=small/", "release": "Cemetery Urn", "url": "https://cemeteryurn.bandcamp.com/album/cemetery-urn", "note": null, "tracks": 10, "playable": 10, "minutes": 41}, {"name": "Deiquisitor", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3295569345/size=large/tracklist=true/artwork=small/", "release": "Deiquisitor Split", "url": "https://deiquisitor.bandcamp.com/album/deiquisitor-split", "note": null, "tracks": 4, "playable": 4, "minutes": 14}, {"name": "Demilich", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=843833116/size=large/tracklist=true/artwork=small/", "release": "20th Adversary Of Emptiness", "url": "https://demilich.bandcamp.com/album/20th-adversary-of-emptiness", "note": null, "tracks": 29, "playable": 29, "minutes": 112}, {"name": "Derketa", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1938457611/size=large/tracklist=true/artwork=small/", "release": "In Death We Meet (remix with bonus tracks)", "url": "https://derketa.bandcamp.com/album/in-death-we-meet-remix-with-bonus-tracks", "note": null, "tracks": 10, "playable": 10, "minutes": 59}, {"name": "Fetid", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1321630587/size=large/tracklist=true/artwork=small/", "release": "Sentient Pile of Amorphous Rot", "url": "https://fetid.bandcamp.com/album/sentient-pile-of-amorphous-rot", "note": null, "tracks": 4, "playable": 4, "minutes": 20}, {"name": "Galvanizer", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1630928335/size=large/tracklist=true/artwork=small/", "release": "Promo 2024", "url": "https://galvanizer.bandcamp.com/album/promo-2024", "note": null, "tracks": 2, "playable": 2, "minutes": 8}, {"name": "Grave Miasma", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=580172242/size=large/tracklist=true/artwork=small/", "release": "Abyss of Wrathful Deities", "url": "https://gravemiasma.bandcamp.com/album/abyss-of-wrathful-deities", "note": null, "tracks": 9, "playable": 9, "minutes": 53}, {"name": "Hyperdontia", "country": "Turkey/Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=624696574/size=large/tracklist=true/artwork=small/", "release": "Dormant Scourge", "url": "https://hyperdontiaofficial.bandcamp.com/album/dormant-scourge", "note": null, "tracks": 2, "playable": 2, "minutes": 10}, {"name": "Incantation", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2372488008/size=large/tracklist=true/artwork=small/", "release": "Onward To Golgotha - Live", "url": "https://incantation.bandcamp.com/album/onward-to-golgotha-live", "note": null, "tracks": 18, "playable": 18, "minutes": 76}, {"name": "Mefitic", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2324631395/size=large/tracklist=true/artwork=small/", "release": "Columns of Subsidence", "url": "https://mefitic.bandcamp.com/album/columns-of-subsidence", "note": null, "tracks": 2, "playable": 1, "minutes": 6}, {"name": "Necros Christos", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3828552797/size=large/tracklist=true/artwork=small/", "release": "Domedon Doxomedon", "url": "https://necroschristos.bandcamp.com/album/domedon-doxomedon", "note": null, "tracks": 27, "playable": 27, "minutes": 113}, {"name": "Necrot", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2623516540/size=large/tracklist=true/artwork=small/", "release": "Lifeless Birth", "url": "https://necrot.bandcamp.com/album/lifeless-birth", "note": null, "tracks": 7, "playable": 7, "minutes": 40}, {"name": "Necrowretch", "country": "France", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3502597276/size=large/tracklist=true/artwork=small/", "release": "Swords of Dajjal", "url": "https://necrowretch.bandcamp.com/album/swords-of-dajjal", "note": null, "tracks": 8, "playable": 8, "minutes": 37}, {"name": "Phrenelith", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1727365049/size=large/tracklist=true/artwork=small/", "release": "Ashen Womb", "url": "https://phrenelith.bandcamp.com/album/ashen-womb", "note": null, "tracks": 9, "playable": 9, "minutes": 39}, {"name": "Pissgrave", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2885129097/size=large/tracklist=true/artwork=small/", "release": "Malignant Worthlessness", "url": "https://pissgrave.bandcamp.com/album/malignant-worthlessness", "note": null, "tracks": 9, "playable": 9, "minutes": 31}, {"name": "Reptilian", "country": "Norway", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/track=2803156869/size=large/tracklist=true/artwork=small/", "release": "Huitzilopochtli", "url": "https://reptilianfusa.bandcamp.com/track/huitzilopochtli", "note": null, "tracks": 1, "playable": 1, "minutes": 6}, {"name": "Rippikoulu", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=593467452/size=large/tracklist=true/artwork=small/", "release": "Musta seremonia", "url": "https://rippikoulu.bandcamp.com/album/musta-seremonia", "note": null, "tracks": 6, "playable": 6, "minutes": 31}, {"name": "Runemagick", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=145349665/size=large/tracklist=true/artwork=small/", "release": "After Chaos: Nocturnal Vigil", "url": "https://runemagick.bandcamp.com/album/after-chaos-nocturnal-vigil", "note": null, "tracks": 8, "playable": 2, "minutes": 25}, {"name": "Scolex", "country": "United States", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Sempiternal Dusk", "country": "United States", "embed": null, "release": null, "url": null, "note": "no bandcamp listed", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Spectral Voice", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=703091635/size=large/tracklist=true/artwork=small/", "release": "Necrotic Demos", "url": "https://spectralvoice.bandcamp.com/album/necrotic-demos", "note": null, "tracks": 7, "playable": 7, "minutes": 48}, {"name": "Taphos", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1243913610/size=large/tracklist=true/artwork=small/", "release": "Tetralogy of Death", "url": "https://taphos.bandcamp.com/album/tetralogy-of-death", "note": null, "tracks": 1, "playable": 1, "minutes": 4}, {"name": "Torture Rack", "country": "United States", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2156342764/size=large/tracklist=true/artwork=small/", "release": "Barbaric Persecution", "url": "https://torturerack.bandcamp.com/album/barbaric-persecution", "note": null, "tracks": 11, "playable": 11, "minutes": 31}, {"name": "Triumvir Foul", "country": "United States", "embed": null, "release": null, "url": null, "note": "HTTPError: 404 Client Error: Not Found for url: https://vrasubatlat.bandcamp.com/music", "tracks": 0, "playable": 0, "minutes": 0}, {"name": "Undergang", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2771124459/size=large/tracklist=true/artwork=small/", "release": "Maddikehavets Dans", "url": "https://undergang.bandcamp.com/album/maddikehavets-dans", "note": null, "tracks": 1, "playable": 1, "minutes": 5}, {"name": "Venenum", "country": "Germany", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1406069448/size=large/tracklist=true/artwork=small/", "release": "Trance Of Death", "url": "https://venenum.bandcamp.com/album/trance-of-death", "note": null, "tracks": 7, "playable": 7, "minutes": 51}, {"name": "Wormridden", "country": "International", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=4117498378/size=large/tracklist=true/artwork=small/", "release": "Festering Glorification", "url": "https://wormridden.bandcamp.com/album/festering-glorification", "note": null, "tracks": 2, "playable": 2, "minutes": 12}];
 const KEY = 'metalhop:kill-town-death-fest-2018-the-resurrection';
+// Heard is per edition -- you sat through this bill. Liking a band is about
+// the band, so it is one shared key across every page here: like Dead Void in
+// 2019 and they show liked in 2021 and 2026 too.
+const LIKED = 'metalhop:liked';
 let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let liked = new Set(JSON.parse(localStorage.getItem(LIKED) || '[]'));
 let cur = -1;
 
 const listEl = document.getElementById('list');
@@ -59,6 +72,17 @@ const nowEl  = document.getElementById('now');
 const player = document.getElementById('player');
 
 function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+// No current band name carries a quote, but the fest books what it books and
+// one would silently break the attribute it lands in.
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+                                 .replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function saveLiked(){ localStorage.setItem(LIKED, JSON.stringify([...liked])); }
+
+function toggleLike(name){
+ liked.has(name) ? liked.delete(name) : liked.add(name);
+ saveLiked();
+ render();   // safe mid-playback: render never touches the iframe
+}
 
 // Bandcamp gates some tracks on some releases; the embed shows them greyed.
 // Say so up front so a half-streamable record isn't a surprise mid-listen.
@@ -72,19 +96,42 @@ function meta(b){
  return s;
 }
 
+// The bar's like button reflects whichever band is selected, so it is redrawn
+// with the list rather than set once at startup.
+function syncLikeBtn(){
+ const b = BANDS[cur];
+ const on = b && liked.has(b.name);
+ const btn = document.getElementById('likebtn');
+ btn.innerHTML = on ? '&hearts; liked' : '&#9825; like';
+ btn.style.color = on ? '#c33' : '';
+ btn.disabled = cur < 0;
+}
+
 function render(){
+ syncLikeBtn();
  listEl.innerHTML = '';
  BANDS.forEach((b, i) => {
   const li = document.createElement('li');
   li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
-               + (b.embed ? '' : 'dead');
+               + (liked.has(b.name) ? 'liked ' : '') + (b.embed ? '' : 'dead');
   li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
    + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
    + `<span class=rel>${meta(b)}</span></span>`
    // A play glyph only where there is something to play; the embed is
    // cross-origin, so this marks what is selected, never what is sounding.
-   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`
+   + `<span class=like role=button tabindex=0 aria-pressed="${liked.has(b.name)}"`
+   + ` aria-label="like ${esc(b.name)}">`
+   + `${liked.has(b.name) ? '&hearts;' : '&#9825;'}</span>`;
   li.onclick = () => play(i);
+  // The heart sits inside the row, so its click must not also start the band.
+  const heart = li.querySelector('.like');
+  heart.onclick = e => { e.stopPropagation(); toggleLike(b.name); };
+  heart.onkeydown = e => {
+   if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault(); e.stopPropagation(); toggleLike(b.name);
+   }
+  };
   listEl.appendChild(li);
  });
 }
@@ -145,10 +192,16 @@ document.getElementById('unheard').onclick = () => {
  const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
  if(i >= 0) play(i); else alert('all heard');
 };
+document.getElementById('likebtn').onclick = () => {
+ if(cur >= 0) toggleLike(BANDS[cur].name);
+};
 document.onkeydown = e => {
+ if(e.target.tagName === 'BUTTON' || e.target.className === 'like') return;
  if(e.key === 'n') step(1);
  if(e.key === 'p') step(-1);
  if(e.key === 's') document.getElementById('stop').click();
+ if(e.key === 'l' && cur >= 0) toggleLike(BANDS[cur].name);
 };
+
 render();
 </script>

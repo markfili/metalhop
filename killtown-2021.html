@@ -35,6 +35,13 @@
  li.dead:hover,li.dead:active{background:#141414;border-color:#2c2c2c}
  .tick{color:#4a4;font-size:15px;width:16px;text-align:center;flex:none}
  .play{color:#777;font-size:14px;flex:none;width:14px;text-align:center}
+ /* Padded well past the glyph: this is a finger target sitting inside
+    another one, so it has to be easy to hit and easy to miss. */
+ .like{flex:none;color:#4a4a4a;font-size:17px;line-height:1;padding:6px 2px 6px 8px;
+       cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .like:hover{color:#c33}
+ .like:focus-visible{outline:2px solid #c33;outline-offset:2px;border-radius:3px}
+ li.liked .like{color:#c33}
  a{color:#c33}
 </style>
 <h1>Kill-Town Death Fest 2021 “Corona Edition”</h1>
@@ -46,12 +53,18 @@
  <button id=stop>stop</button>
  <button id=mark>mark heard</button>
  <button id=unheard>next unheard</button>
+ <button id=likebtn>&#9825; like</button>
 </div>
 <ol id=list></ol>
 <script>
 const BANDS = [{"name": "Bastard Grave", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2425808346/size=large/tracklist=true/artwork=small/", "release": "Diorama Of Human Suffering", "url": "https://bastardgrave.bandcamp.com/album/diorama-of-human-suffering", "note": null, "tracks": 9, "playable": 9, "minutes": 38}, {"name": "Chaotian", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/track=1046901957/size=large/tracklist=true/artwork=small/", "release": "Vectors of Pestilence (Circles of Ubiquitous Mutilation)", "url": "https://chaotian.bandcamp.com/track/vectors-of-pestilence-circles-of-ubiquitous-mutilation", "note": null, "tracks": 1, "playable": 1, "minutes": 7}, {"name": "Concrete Winds", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3741082001/size=large/tracklist=true/artwork=small/", "release": "Concrete Winds", "url": "https://concretewinds.bandcamp.com/album/concrete-winds", "note": null, "tracks": 9, "playable": 9, "minutes": 25}, {"name": "Dead Void", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1412347064/size=large/tracklist=true/artwork=small/", "release": "Cranial Devastation", "url": "https://deadvoid.bandcamp.com/album/cranial-devastation", "note": null, "tracks": 5, "playable": 5, "minutes": 35}, {"name": "Demilich", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=843833116/size=large/tracklist=true/artwork=small/", "release": "20th Adversary Of Emptiness", "url": "https://demilich.bandcamp.com/album/20th-adversary-of-emptiness", "note": null, "tracks": 29, "playable": 29, "minutes": 112}, {"name": "Fuoco Fatuo", "country": "Italy", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2432759025/size=large/tracklist=true/artwork=small/", "release": "Obsidian Katabasis", "url": "https://fuocofatuo.bandcamp.com/album/obsidian-katabasis", "note": null, "tracks": 6, "playable": 6, "minutes": 60}, {"name": "Ghastly", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1514183516/size=large/tracklist=true/artwork=small/", "release": "Carrion of Time", "url": "https://ghastly.bandcamp.com/album/carrion-of-time", "note": null, "tracks": 1, "playable": 1, "minutes": 7}, {"name": "Grave Miasma", "country": "United Kingdom", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=580172242/size=large/tracklist=true/artwork=small/", "release": "Abyss of Wrathful Deities", "url": "https://gravemiasma.bandcamp.com/album/abyss-of-wrathful-deities", "note": null, "tracks": 9, "playable": 9, "minutes": 53}, {"name": "Krypts", "country": "Finland", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2813677146/size=large/tracklist=true/artwork=small/", "release": "Unending Degradation", "url": "https://krypts.bandcamp.com/album/unending-degradation", "note": null, "tracks": 8, "playable": 8, "minutes": 39}, {"name": "Septage", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=2535379740/size=large/tracklist=true/artwork=small/", "release": "Septic Worship (Intolerant Spree of Infesting Forms)", "url": "https://septage.bandcamp.com/album/septic-worship-intolerant-spree-of-infesting-forms", "note": null, "tracks": 15, "playable": 15, "minutes": 20}, {"name": "Strychnos", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1676517910/size=large/tracklist=true/artwork=small/", "release": "Theodicy of the Seven Mile Scythe (EP)", "url": "https://strychnos.bandcamp.com/album/theodicy-of-the-seven-mile-scythe-ep", "note": null, "tracks": 2, "playable": 2, "minutes": 10}, {"name": "Tardus Mortem", "country": "Denmark", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=3209096190/size=large/tracklist=true/artwork=small/", "release": "Reincarnated Through Bloodshed", "url": "https://tardusmortem.bandcamp.com/album/reincarnated-through-bloodshed", "note": null, "tracks": 8, "playable": 8, "minutes": 30}, {"name": "The Funeral Orchestra", "country": "Sweden", "embed": "https://bandcamp.com/EmbeddedPlayer/v=2/album=1914641078/size=large/tracklist=true/artwork=small/", "release": "Inexistentia (The Funeral Orchestra & Grave Upheaval Split)", "url": "https://thefuneralorchestra.bandcamp.com/album/inexistentia-the-funeral-orchestra-grave-upheaval-split", "note": null, "tracks": 2, "playable": 2, "minutes": 22}];
 const KEY = 'metalhop:kill-town-death-fest-2021-corona-edition';
+// Heard is per edition -- you sat through this bill. Liking a band is about
+// the band, so it is one shared key across every page here: like Dead Void in
+// 2019 and they show liked in 2021 and 2026 too.
+const LIKED = 'metalhop:liked';
 let heard = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+let liked = new Set(JSON.parse(localStorage.getItem(LIKED) || '[]'));
 let cur = -1;
 
 const listEl = document.getElementById('list');
@@ -59,6 +72,17 @@ const nowEl  = document.getElementById('now');
 const player = document.getElementById('player');
 
 function save(){ localStorage.setItem(KEY, JSON.stringify([...heard])); }
+// No current band name carries a quote, but the fest books what it books and
+// one would silently break the attribute it lands in.
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;')
+                                 .replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function saveLiked(){ localStorage.setItem(LIKED, JSON.stringify([...liked])); }
+
+function toggleLike(name){
+ liked.has(name) ? liked.delete(name) : liked.add(name);
+ saveLiked();
+ render();   // safe mid-playback: render never touches the iframe
+}
 
 // Bandcamp gates some tracks on some releases; the embed shows them greyed.
 // Say so up front so a half-streamable record isn't a surprise mid-listen.
@@ -72,19 +96,42 @@ function meta(b){
  return s;
 }
 
+// The bar's like button reflects whichever band is selected, so it is redrawn
+// with the list rather than set once at startup.
+function syncLikeBtn(){
+ const b = BANDS[cur];
+ const on = b && liked.has(b.name);
+ const btn = document.getElementById('likebtn');
+ btn.innerHTML = on ? '&hearts; liked' : '&#9825; like';
+ btn.style.color = on ? '#c33' : '';
+ btn.disabled = cur < 0;
+}
+
 function render(){
+ syncLikeBtn();
  listEl.innerHTML = '';
  BANDS.forEach((b, i) => {
   const li = document.createElement('li');
   li.className = (i === cur ? 'on ' : '') + (heard.has(b.name) ? 'heard ' : '')
-               + (b.embed ? '' : 'dead');
+               + (liked.has(b.name) ? 'liked ' : '') + (b.embed ? '' : 'dead');
   li.innerHTML = `<span class=tick>${heard.has(b.name) ? '&check;' : ''}</span>`
    + `<span class=nm><b>${b.name}</b> <span class=cy>${b.country}</span>`
    + `<span class=rel>${meta(b)}</span></span>`
    // A play glyph only where there is something to play; the embed is
    // cross-origin, so this marks what is selected, never what is sounding.
-   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`;
+   + `<span class=play>${b.embed ? '&#9654;' : ''}</span>`
+   + `<span class=like role=button tabindex=0 aria-pressed="${liked.has(b.name)}"`
+   + ` aria-label="like ${esc(b.name)}">`
+   + `${liked.has(b.name) ? '&hearts;' : '&#9825;'}</span>`;
   li.onclick = () => play(i);
+  // The heart sits inside the row, so its click must not also start the band.
+  const heart = li.querySelector('.like');
+  heart.onclick = e => { e.stopPropagation(); toggleLike(b.name); };
+  heart.onkeydown = e => {
+   if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault(); e.stopPropagation(); toggleLike(b.name);
+   }
+  };
   listEl.appendChild(li);
  });
 }
@@ -145,10 +192,16 @@ document.getElementById('unheard').onclick = () => {
  const i = BANDS.findIndex(b => b.embed && !heard.has(b.name));
  if(i >= 0) play(i); else alert('all heard');
 };
+document.getElementById('likebtn').onclick = () => {
+ if(cur >= 0) toggleLike(BANDS[cur].name);
+};
 document.onkeydown = e => {
+ if(e.target.tagName === 'BUTTON' || e.target.className === 'like') return;
  if(e.key === 'n') step(1);
  if(e.key === 'p') step(-1);
  if(e.key === 's') document.getElementById('stop').click();
+ if(e.key === 'l' && cur >= 0) toggleLike(BANDS[cur].name);
 };
+
 render();
 </script>
